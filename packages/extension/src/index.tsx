@@ -110,7 +110,6 @@ const StateRenderer: FunctionComponent = observer(() => {
       <div style={{ height: "100%" }}>
         <Banner
           icon={require("./public/assets/temp-icon.svg")}
-          logo={require("./public/assets/logo-temp.png")}
           subtitle="Wallet for the Interchain"
         />
       </div>
@@ -120,7 +119,6 @@ const StateRenderer: FunctionComponent = observer(() => {
       <div style={{ height: "100%" }}>
         <Banner
           icon={require("./public/assets/temp-icon.svg")}
-          logo={require("./public/assets/logo-temp.png")}
           subtitle="Wallet for the Interchain"
         />
       </div>

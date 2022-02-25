@@ -86,12 +86,11 @@ export const RegisterPage: FunctionComponent = observer(() => {
           alt="logo"
         />
         <div className={style.logoInnerContainer}>
-          <img
-            className={style.logo}
-            src={require("../../public/assets/logo-temp.png")}
-            alt="logo"
-          />
-          <div className={style.paragraph}>Wallet for the Interchain</div>
+          <h2>f(x)Wallet Extension</h2>
+          <div className={style.paragraph}>
+            A Cross-Chain Extension Wallet for Function X Blockchain, Ethereum,
+            Binance Smart Chain, Tron and more
+          </div>
         </div>
       </div>
       {registerConfig.render()}

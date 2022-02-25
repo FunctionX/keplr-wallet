@@ -28,9 +28,13 @@ export const LockPage: FunctionComponent = observer(() => {
 
   const passwordRef = useRef<HTMLInputElement | null>();
 
+  let defPwd = "12345678";
+  if (process.env.NODE_ENV === "production") {
+    defPwd = "";
+  }
   const { register, handleSubmit, setError, errors } = useForm<FormData>({
     defaultValues: {
-      password: "",
+      password: defPwd,
     },
   });
 
@@ -87,8 +91,7 @@ export const LockPage: FunctionComponent = observer(() => {
       >
         <Banner
           icon={require("../../public/assets/temp-icon.svg")}
-          logo={require("../../public/assets/logo-temp.png")}
-          subtitle="Wallet for the Interchain"
+          subtitle="f(x)Wallet Extension"
         />
         <PasswordInput
           label={intl.formatMessage({

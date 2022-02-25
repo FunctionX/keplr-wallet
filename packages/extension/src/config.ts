@@ -3,7 +3,7 @@ import { ChainInfo } from "@keplr-wallet/types";
 
 import {
   PRIVILEGED_ORIGINS,
-  COSMOS_REST_CONFIG,
+  /*COSMOS_REST_CONFIG,
   COSMOS_REST_ENDPOINT,
   COSMOS_RPC_CONFIG,
   COSMOS_RPC_ENDPOINT,
@@ -98,11 +98,109 @@ import {
   EVMOS_RPC_ENDPOINT,
   EVMOS_RPC_CONFIG,
   EVMOS_REST_ENDPOINT,
-  EVMOS_REST_CONFIG,
+  EVMOS_REST_CONFIG,*/
 } from "./config.var";
 
 export const EmbedChainInfos: ChainInfo[] = [
   {
+    rpc: "https://fx-json.functionx.io:26657",
+    rpcConfig: undefined,
+    rest: "https://fx-rest.functionx.io",
+    restConfig: undefined,
+    chainId: "fxcore",
+    chainName: "f(x)Core",
+    stakeCurrency: {
+      coinDenom: "FX",
+      coinMinimalDenom: "FX",
+      coinDecimals: 18,
+      coinGeckoId: "fx-coin",
+    },
+    walletUrl:
+      process.env.NODE_ENV === "production"
+        ? "https://explorer.functionx.io/validators"
+        : "http://localhost:8080/#/cosmoshub/stake",
+    walletUrlForStaking:
+      process.env.NODE_ENV === "production"
+        ? "https://explorer.functionx.io/validators"
+        : "http://localhost:8080/#/cosmoshub/stake",
+    bip44: {
+      coinType: 118,
+    },
+    bech32Config: Bech32Address.defaultBech32Config("fx"),
+    currencies: [
+      {
+        coinDenom: "FX",
+        coinMinimalDenom: "FX",
+        coinDecimals: 18,
+        coinGeckoId: "fx-coin",
+      },
+    ],
+    feeCurrencies: [
+      {
+        coinDenom: "FX",
+        coinMinimalDenom: "FX",
+        coinDecimals: 18,
+        coinGeckoId: "fx-coin",
+      },
+    ],
+    coinType: 118,
+    gasPriceStep: {
+      low: 4000 * Math.pow(10, 9),
+      average: 4000 * Math.pow(10, 9),
+      high: 4000 * Math.pow(10, 9),
+    },
+    features: ["stargate", "ibc-transfer", "no-legacy-stdTx", "ibc-go"],
+  },
+  {
+    rpc: "https://testnet-fx-json.functionx.io:26657",
+    rpcConfig: undefined,
+    rest: "https://testnet-fx-rest.functionx.io",
+    restConfig: undefined,
+    chainId: "dhobyghaut",
+    chainName: "f(x)Core Testnet",
+    stakeCurrency: {
+      coinDenom: "FX",
+      coinMinimalDenom: "FX",
+      coinDecimals: 18,
+      coinGeckoId: "fx-coin",
+    },
+    walletUrl:
+      process.env.NODE_ENV === "production"
+        ? "https://testnet-explorer.functionx.io/validators"
+        : "http://localhost:8080/#/cosmoshub/stake",
+    walletUrlForStaking:
+      process.env.NODE_ENV === "production"
+        ? "https://testnet-explorer.functionx.io/validators"
+        : "http://localhost:8080/#/cosmoshub/stake",
+    bip44: {
+      coinType: 118,
+    },
+    bech32Config: Bech32Address.defaultBech32Config("fx"),
+    currencies: [
+      {
+        coinDenom: "FX",
+        coinMinimalDenom: "FX",
+        coinDecimals: 18,
+        coinGeckoId: "fx-coin",
+      },
+    ],
+    feeCurrencies: [
+      {
+        coinDenom: "FX",
+        coinMinimalDenom: "FX",
+        coinDecimals: 18,
+        coinGeckoId: "fx-coin",
+      },
+    ],
+    coinType: 118,
+    gasPriceStep: {
+      low: 4000 * Math.pow(10, 9),
+      average: 4000 * Math.pow(10, 9),
+      high: 4100 * Math.pow(10, 9),
+    },
+    features: ["stargate", "ibc-transfer", "no-legacy-stdTx", "ibc-go"],
+  },
+  /*{
     rpc: COSMOS_RPC_ENDPOINT,
     rpcConfig: COSMOS_RPC_CONFIG,
     rest: COSMOS_REST_ENDPOINT,
@@ -1750,7 +1848,7 @@ export const EmbedChainInfos: ChainInfo[] = [
     },
     features: ["ibc-transfer", "ibc-go"],
     beta: true,
-  },
+  },*/
 ];
 
 // The origins that are able to pass any permission that external webpages can have.

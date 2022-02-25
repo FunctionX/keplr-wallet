@@ -30,6 +30,10 @@ $container-width: 420px;
   :global(.btn) {
     margin-left: 0;
     margin-right: 0;
+    color: #0d0f17;
+    background-color: transparent;
+    background-image: none;
+    border-color: #0d0f17;
   }
 
   .logo-container {

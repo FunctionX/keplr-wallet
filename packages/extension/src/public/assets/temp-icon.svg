@@ -1,39 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="200px" height="200px" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 62 (91390) - https://sketch.com -->
-    <title>Artboard Copy 6@960w</title>
-    <desc>Created with Sketch.</desc>
+<svg width="34px" height="34px" viewBox="0 0 34 34" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>图形logo@1x</title>
     <defs>
-        <radialGradient cx="90.8672534%" cy="10.9586258%" fx="90.8672534%" fy="10.9586258%" r="172.001111%" gradientTransform="translate(0.908673,0.109586),rotate(140.172042),scale(1.000000,1.206725),translate(-0.908673,-0.109586)" id="radialGradient-1">
-            <stop stop-color="#2F80F2" offset="0%"></stop>
-            <stop stop-color="#A942B5" offset="99.9656883%"></stop>
-        </radialGradient>
-        <radialGradient cx="0%" cy="2.14812083%" fx="0%" fy="2.14812083%" r="159.107686%" gradientTransform="translate(0.000000,0.021481),rotate(46.320810),scale(1.000000,1.047856),translate(-0.000000,-0.021481)" id="radialGradient-2">
-            <stop stop-color="#45F9DE" offset="0%"></stop>
-            <stop stop-color="#A942B5" stop-opacity="0" offset="100%"></stop>
-        </radialGradient>
-        <radialGradient cx="100%" cy="100%" fx="100%" fy="100%" r="96.0436813%" gradientTransform="translate(1.000000,1.000000),rotate(180.000000),scale(1.000000,0.514961),translate(-1.000000,-1.000000)" id="radialGradient-3">
-            <stop stop-color="#E957C5" offset="0%"></stop>
-            <stop stop-color="#AC43B6" stop-opacity="0.0437004098" offset="100%"></stop>
-            <stop stop-color="#A942B5" stop-opacity="0" offset="100%"></stop>
-        </radialGradient>
-        <radialGradient cx="50%" cy="50%" fx="50%" fy="50%" r="57.6518464%" gradientTransform="translate(0.500000,0.500000),rotate(119.937813),scale(1.000000,1.499193),translate(-0.500000,-0.500000)" id="radialGradient-4">
-            <stop stop-color="#000000" stop-opacity="0.184877622" offset="0%"></stop>
-            <stop stop-color="#101010" offset="100%"></stop>
-        </radialGradient>
-        <linearGradient x1="94.2375438%" y1="58.966132%" x2="0%" y2="0%" id="linearGradient-5">
-            <stop stop-color="#FFFFFF" stop-opacity="0.184877622" offset="0%"></stop>
-            <stop stop-color="#FFFFFF" offset="100%"></stop>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#1E1E1E" offset="0%"></stop>
+            <stop stop-color="#000000" offset="100%"></stop>
+        </linearGradient>
+        <path d="M10.0025615,0 L9.99552127,0.00462070951 L0.0192432167,5.9897142 L0,5.9787201 L0,17.8187305 L5.15796432,20.7965388 L5.15796432,9.00640017 L10.1796616,11.9791097 L10.1837293,11.9765604 L13.3200607,15.4763495 L10.1416446,23.8 L14.4873261,21.2281768 L15.6594414,18.1275214 L17.0814056,19.7388743 L20.4,17.7433652 L17.3397027,13.8218168 L20.3414881,5.99082955 L10.0025615,0 Z M14.341824,9.69879585 L9,6.64021231 L10.9271314,5.49230769 L16.2,8.5114632 L15.3131246,10.9846154 L14.341824,9.69879585 Z" id="path-2"></path>
+        <filter x="-67.3%" y="-67.3%" width="234.7%" height="234.7%" filterUnits="objectBoundingBox" id="filter-4">
+            <feGaussianBlur stdDeviation="5.984" in="SourceGraphic"></feGaussianBlur>
+        </filter>
+        <filter x="-67.3%" y="-67.3%" width="234.7%" height="234.7%" filterUnits="objectBoundingBox" id="filter-5">
+            <feGaussianBlur stdDeviation="5.984" in="SourceGraphic"></feGaussianBlur>
+        </filter>
+        <filter x="-67.3%" y="-67.3%" width="234.7%" height="234.7%" filterUnits="objectBoundingBox" id="filter-6">
+            <feGaussianBlur stdDeviation="5.984" in="SourceGraphic"></feGaussianBlur>
+        </filter>
+        <filter x="-49.0%" y="-49.0%" width="198.0%" height="198.0%" filterUnits="objectBoundingBox" id="filter-7">
+            <feGaussianBlur stdDeviation="4.352" in="SourceGraphic"></feGaussianBlur>
+        </filter>
+        <linearGradient x1="35.6767112%" y1="0%" x2="50%" y2="100%" id="linearGradient-8">
+            <stop stop-color="#000000" stop-opacity="0.322115385" offset="0%"></stop>
+            <stop stop-color="#000000" stop-opacity="0.290756119" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="56.0584024%" y1="1.23181218%" x2="50%" y2="100%" id="linearGradient-9">
+            <stop stop-color="#000000" stop-opacity="0.201841128" offset="0%"></stop>
+            <stop stop-color="#000000" stop-opacity="0.0700393357" offset="100%"></stop>
         </linearGradient>
     </defs>
-    <g id="Artboard-Copy-6" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Group">
-            <rect id="Rectangle" fill="url(#radialGradient-1)" x="0" y="0" width="200" height="200" rx="16"></rect>
-            <rect id="Rectangle-Copy-2" fill-opacity="0.57" fill="url(#radialGradient-2)" x="0" y="0" width="200" height="200" rx="16"></rect>
-            <rect id="Rectangle-Copy-3" fill-opacity="0.68" fill="url(#radialGradient-3)" x="0" y="0" width="200" height="200" rx="16"></rect>
-            <rect id="Rectangle-Copy" fill-opacity="0.08" fill="url(#radialGradient-4)" x="0" y="0" width="200" height="200" rx="16"></rect>
-            <rect id="Rectangle-Copy-4" fill-opacity="0.03" fill="url(#linearGradient-5)" x="0" y="0" width="200" height="200" rx="16"></rect>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="图形logo">
+            <g id="4.2-2">
+                <rect id="Rectangle" fill="url(#linearGradient-1)" x="0" y="0" width="34" height="34" rx="7.4375"></rect>
+                <g id="编组-3">
+                    <g id="img/boot/冷启动静态">
+                        <circle id="椭圆形" cx="17" cy="17" r="17"></circle>
+                        <g id="编组" transform="translate(6.800000, 5.100000)">
+                            <mask id="mask-3" fill="white">
+                                <use xlink:href="#path-2"></use>
+                            </mask>
+                            <use id="Fill-1" fill="#FFFFFF" xlink:href="#path-2"></use>
+                            <g id="编组-2" mask="url(#mask-3)">
+                                <g transform="translate(-16.320000, -14.960000)">
+                                    <circle id="椭圆形" fill="#A3FF54" opacity="0.195986793" filter="url(#filter-4)" cx="39.848" cy="33.728" r="13.328"></circle>
+                                    <circle id="椭圆形备份" fill="#27A1FF" opacity="0.65578497" filter="url(#filter-5)" cx="20.128" cy="21.488" r="13.328"></circle>
+                                    <circle id="椭圆形备份" fill="#FF1BF9" opacity="0.183244978" filter="url(#filter-6)" cx="36.448" cy="13.328" r="13.328"></circle>
+                                    <circle id="椭圆形备份" fill="#03FFA6" opacity="0.245512463" filter="url(#filter-7)" cx="13.328" cy="35.088" r="13.328"></circle>
+                                </g>
+                            </g>
+                            <polygon id="路径" fill="url(#linearGradient-8)" style="mix-blend-mode: soft-light;" mask="url(#mask-3)" points="10.2 11.9 20.7217833 5.77020374 20.4 22.102999 10.2 25.4288217"></polygon>
+                            <polygon id="路径-2" fill="url(#linearGradient-9)" style="mix-blend-mode: overlay;" mask="url(#mask-3)" points="6.03961325e-16 5.9787201 5.15796432 9.00640017 5.15796432 20.7965388 6.03961325e-16 17.8187305"></polygon>
+                        </g>
+                    </g>
+                </g>
+            </g>
         </g>
-        <polygon id="K" fill="#FFFFFF" fill-rule="nonzero" points="70.4 170 70.4 108 129 170 161.6 170 161.6 168.4 94.2 97.8 156.4 30.8 156.4 30 123.6 30 70.4 89.2 70.4 30 44 30 44 170"></polygon>
     </g>
 </svg>

@@ -24,6 +24,7 @@ import { IBCTransferView } from "./ibc-transfer";
 import { DenomHelper } from "@keplr-wallet/common";
 import { Dec } from "@keplr-wallet/unit";
 import { WalletStatus } from "@keplr-wallet/stores";
+import { GovView } from "./gov";
 
 export const MainPage: FunctionComponent = observer(() => {
   const history = useHistory();
@@ -133,6 +134,11 @@ export const MainPage: FunctionComponent = observer(() => {
           </CardBody>
         </Card>
       ) : null}
+      <Card className={classnames(style.card, "shadow")}>
+        <CardBody>
+          <GovView />
+        </CardBody>
+      </Card>
       {hasTokens ? (
         <Card className={classnames(style.card, "shadow")}>
           <CardBody>{<TokensView />}</CardBody>

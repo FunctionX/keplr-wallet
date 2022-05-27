@@ -16,6 +16,9 @@ import { useHistory } from "react-router";
 import classnames from "classnames";
 import { Dec } from "@keplr-wallet/unit";
 
+import { Bech32Address } from "@keplr-wallet/cosmos";
+import { Staking } from "@keplr-wallet/stores";
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const QrCode = require("qrcode");
 
@@ -46,6 +49,27 @@ export const TxButtonView: FunctionComponent = observer(() => {
   const queryBalances = queries.queryBalances.getQueryBech32Address(
     accountInfo.bech32Address
   );
+
+  let validator = undefined;
+  if (accountInfo.bech32Address) {
+    const bondedValidators = queries.cosmos.queryValidators.getQueryStatus(
+      Staking.BondStatus.Bonded
+    );
+    const unbondingValidators = queries.cosmos.queryValidators.getQueryStatus(
+      Staking.BondStatus.Unbonding
+    );
+    const unbondedValidators = queries.cosmos.queryValidators.getQueryStatus(
+      Staking.BondStatus.Unbonded
+    );
+
+    const validatorAddress = Bech32Address.fromBech32(
+      accountInfo.bech32Address
+    ).toBech32(chainStore.current.bech32Config.bech32PrefixValAddr);
+    validator = bondedValidators.validators
+      .concat(unbondingValidators.validators)
+      .concat(unbondedValidators.validators)
+      .find((val) => val.operator_address === validatorAddress);
+  }
 
   const [isDepositOpen, setIsDepositOpen] = useState(false);
 
@@ -122,6 +146,22 @@ export const TxButtonView: FunctionComponent = observer(() => {
         >
           <FormattedMessage id="main.account.tooltip.no-asset" />
         </Tooltip>
+      ) : null}
+      {validator ? (
+        <Button
+          className={styleTxButton.button}
+          color="primary"
+          outline
+          onClick={(e) => {
+            e.preventDefault();
+
+            if (hasAssets) {
+              history.push("/validator/edit");
+            }
+          }}
+        >
+          <FormattedMessage id="main.account.button.validator" />
+        </Button>
       ) : null}
     </div>
   );

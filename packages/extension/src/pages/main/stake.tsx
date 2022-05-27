@@ -174,49 +174,56 @@ export const StakeView: FunctionComponent = observer(() => {
           )}
         </div>
         <div style={{ flex: 1 }} />
-        <a
-          href={chainStore.current.walletUrlForStaking}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={(e) => {
-            if (!isStakableExist) {
-              e.preventDefault();
-            } else {
-              analyticsStore.logEvent("Stake button clicked", {
-                chainId: chainStore.current.chainId,
-                chainName: chainStore.current.chainName,
-              });
-            }
-          }}
-        >
-          {/*
+        {/*<a*/}
+        {/*  href={chainStore.current.walletUrlForStaking}*/}
+        {/*  target="_blank"*/}
+        {/*  rel="noopener noreferrer"*/}
+        {/*  onClick={(e) => {*/}
+        {/*    if (!isStakableExist) {*/}
+        {/*      e.preventDefault();*/}
+        {/*    } else {*/}
+        {/*      analyticsStore.logEvent("Stake button clicked", {*/}
+        {/*        chainId: chainStore.current.chainId,*/}
+        {/*        chainName: chainStore.current.chainName,*/}
+        {/*      });*/}
+        {/*    }*/}
+        {/*  }}*/}
+        {/*>*/}
+        {/*
             "Disabled" property in button tag will block the mouse enter/leave events.
             So, tooltip will not work as expected.
             To solve this problem, don't add "disabled" property to button tag and just add "disabled" class manually.
           */}
-          <Button
-            innerRef={stakeBtnRef}
-            className={classnames(styleStake.button, {
-              disabled: !isStakableExist,
-            })}
-            color="primary"
-            size="sm"
-            outline={isRewardExist}
+        <Button
+          // innerRef={stakeBtnRef}
+          className={classnames(styleStake.button, {
+            disabled: !isStakableExist,
+          })}
+          color="primary"
+          size="sm"
+          // outline={isRewardExist}
+          onClick={(e) => {
+            e.preventDefault();
+
+            if (isStakableExist) {
+              history.push("/staking");
+            }
+          }}
+        >
+          <FormattedMessage id="main.stake.button.stake" />
+        </Button>
+        {!isStakableExist ? (
+          <Tooltip
+            placement="bottom"
+            isOpen={tooltipOpen}
+            target={stakeBtnRef}
+            toggle={toogleTooltip}
+            fade
           >
-            <FormattedMessage id="main.stake.button.stake" />
-          </Button>
-          {!isStakableExist ? (
-            <Tooltip
-              placement="bottom"
-              isOpen={tooltipOpen}
-              target={stakeBtnRef}
-              toggle={toogleTooltip}
-              fade
-            >
-              <FormattedMessage id="main.stake.tooltip.no-asset" />
-            </Tooltip>
-          ) : null}
-        </a>
+            <FormattedMessage id="main.stake.tooltip.no-asset" />
+          </Tooltip>
+        ) : null}
+        {/*</a>*/}
       </div>
     </div>
   );

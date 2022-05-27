@@ -102,55 +102,55 @@ import {
 } from "./config.var";
 
 export const EmbedChainInfos: ChainInfo[] = [
-  {
-    rpc: "https://fx-json.functionx.io:26657",
-    rpcConfig: undefined,
-    rest: "https://fx-rest.functionx.io",
-    restConfig: undefined,
-    chainId: "fxcore",
-    chainName: "f(x)Core",
-    stakeCurrency: {
-      coinDenom: "FX",
-      coinMinimalDenom: "FX",
-      coinDecimals: 18,
-      coinGeckoId: "fx-coin",
-    },
-    walletUrl:
-      process.env.NODE_ENV === "production"
-        ? "https://explorer.functionx.io/validators"
-        : "http://localhost:8080/#/cosmoshub/stake",
-    walletUrlForStaking:
-      process.env.NODE_ENV === "production"
-        ? "https://explorer.functionx.io/validators"
-        : "http://localhost:8080/#/cosmoshub/stake",
-    bip44: {
-      coinType: 118,
-    },
-    bech32Config: Bech32Address.defaultBech32Config("fx"),
-    currencies: [
-      {
-        coinDenom: "FX",
-        coinMinimalDenom: "FX",
-        coinDecimals: 18,
-        coinGeckoId: "fx-coin",
-      },
-    ],
-    feeCurrencies: [
-      {
-        coinDenom: "FX",
-        coinMinimalDenom: "FX",
-        coinDecimals: 18,
-        coinGeckoId: "fx-coin",
-      },
-    ],
-    coinType: 118,
-    gasPriceStep: {
-      low: 4000 * Math.pow(10, 9),
-      average: 4000 * Math.pow(10, 9),
-      high: 4000 * Math.pow(10, 9),
-    },
-    features: ["stargate", "ibc-transfer", "no-legacy-stdTx", "ibc-go"],
-  },
+  // {
+  //   rpc: "https://fx-json.functionx.io:26657",
+  //   rpcConfig: undefined,
+  //   rest: "https://fx-rest.functionx.io",
+  //   restConfig: undefined,
+  //   chainId: "fxcore",
+  //   chainName: "f(x)Core",
+  //   stakeCurrency: {
+  //     coinDenom: "FX",
+  //     coinMinimalDenom: "FX",
+  //     coinDecimals: 18,
+  //     coinGeckoId: "fx-coin",
+  //   },
+  //   walletUrl:
+  //     process.env.NODE_ENV === "production"
+  //       ? "https://explorer.functionx.io/validators"
+  //       : "http://localhost:8080/#/cosmoshub/stake",
+  //   walletUrlForStaking:
+  //     process.env.NODE_ENV === "production"
+  //       ? "https://explorer.functionx.io/validators"
+  //       : "http://localhost:8080/#/cosmoshub/stake",
+  //   bip44: {
+  //     coinType: 118,
+  //   },
+  //   bech32Config: Bech32Address.defaultBech32Config("fx"),
+  //   currencies: [
+  //     {
+  //       coinDenom: "FX",
+  //       coinMinimalDenom: "FX",
+  //       coinDecimals: 18,
+  //       coinGeckoId: "fx-coin",
+  //     },
+  //   ],
+  //   feeCurrencies: [
+  //     {
+  //       coinDenom: "FX",
+  //       coinMinimalDenom: "FX",
+  //       coinDecimals: 18,
+  //       coinGeckoId: "fx-coin",
+  //     },
+  //   ],
+  //   coinType: 118,
+  //   gasPriceStep: {
+  //     low: 4000 * Math.pow(10, 9),
+  //     average: 4000 * Math.pow(10, 9),
+  //     high: 4000 * Math.pow(10, 9),
+  //   },
+  //   features: ["ibc-transfer", "ibc-go"],
+  // },
   {
     rpc: "https://testnet-fx-json.functionx.io:26657",
     rpcConfig: undefined,
@@ -198,7 +198,7 @@ export const EmbedChainInfos: ChainInfo[] = [
       average: 4000 * Math.pow(10, 9),
       high: 4100 * Math.pow(10, 9),
     },
-    features: ["stargate", "ibc-transfer", "no-legacy-stdTx", "ibc-go"],
+    features: ["ibc-transfer", "ibc-go"],
   },
   /*{
     rpc: COSMOS_RPC_ENDPOINT,

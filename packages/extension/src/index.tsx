@@ -57,6 +57,12 @@ import { Keplr } from "@keplr-wallet/provider";
 import { InExtensionMessageRequester } from "@keplr-wallet/router-extension";
 import { ExportToMobilePage } from "./pages/setting/export-to-mobile";
 import { LogPageViewWrapper } from "./components/analytics";
+import { ProposalsListPage, VotePage } from "./pages/gov";
+import {
+  StakingPage,
+  ValidatorEditPage,
+  ValidatorListPage,
+} from "./pages/validator";
 
 window.keplr = new Keplr(
   manifest.version,
@@ -150,6 +156,23 @@ ReactDOM.render(
                   />
                   <Route exact path="/register" component={RegisterPage} />
                   <Route exact path="/send" component={SendPage} />
+                  <Route
+                    exact
+                    path="/validator/edit"
+                    component={ValidatorEditPage}
+                  />
+                  <Route
+                    exact
+                    path="/validators"
+                    component={ValidatorListPage}
+                  />
+                  <Route exact path="/staking" component={StakingPage} />
+                  <Route
+                    exact
+                    path="/proposals"
+                    component={ProposalsListPage}
+                  />
+                  <Route exact path="/vote" component={VotePage} />
                   <Route
                     exact
                     path="/ibc-transfer"

@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent, useEffect } from "react";
 
 import { HeaderLayout } from "../../layouts";
 
@@ -10,18 +10,25 @@ import style from "./style.module.scss";
 
 import { useHistory } from "react-router";
 import { useStore } from "../../stores";
-import { CoinInput, FeeButtons, Input, MemoInput } from "../../components/form";
+import {
+  AddressInput,
+  CoinInput,
+  FeeButtons,
+  Input,
+  MemoInput,
+} from "../../components/form";
 import {
   useAmountConfig,
   useFeeConfig,
   useGasConfig,
   useMemoConfig,
+  useRecipientConfig,
 } from "@keplr-wallet/hooks";
 import { useIntl } from "react-intl";
-import { Staking } from "@keplr-wallet/stores";
 import { useNotification } from "../../components/notification";
+import { EthereumEndpoint } from "../../config.ui";
 
-export const StakingPage: FunctionComponent = observer(() => {
+export const GravityPage: FunctionComponent = observer(() => {
   const history = useHistory();
 
   useEffect(() => {
@@ -33,21 +40,7 @@ export const StakingPage: FunctionComponent = observer(() => {
 
   const { chainStore, queriesStore, accountStore, priceStore } = useStore();
   const accountInfo = accountStore.getAccount(chainStore.current.chainId);
-  const queries = queriesStore.get(chainStore.current.chainId);
-
-  const bondedValidators = queries.cosmos.queryValidators.getQueryStatus(
-    Staking.BondStatus.Bonded
-  );
-  const unbondingValidators = queries.cosmos.queryValidators.getQueryStatus(
-    Staking.BondStatus.Unbonding
-  );
-  const unbondedValidators = queries.cosmos.queryValidators.getQueryStatus(
-    Staking.BondStatus.Unbonded
-  );
-
-  const validators = bondedValidators.validators
-    .concat(unbondingValidators.validators)
-    .concat(unbondedValidators.validators);
+  // const queries = queriesStore.get(chainStore.current.chainId);
 
   const intl = useIntl();
 
@@ -71,10 +64,11 @@ export const StakingPage: FunctionComponent = observer(() => {
     amountConfig,
     gasConfig
   );
-
-  const options = ["Delegate", "Undelegate" /*, "Redelegate"*/];
-  const [optionIdx] = useState(0);
-  const [validatorIdx] = useState(0);
+  const recipientConfig = useRecipientConfig(
+    chainStore,
+    current.chainId,
+    EthereumEndpoint
+  );
 
   return (
     <HeaderLayout
@@ -102,34 +96,31 @@ export const StakingPage: FunctionComponent = observer(() => {
           if (accountInfo.isReadyToSendMsgs) {
             try {
               const stdFee = feeConfig.toStdFee();
-              switch (optionIdx) {
-                case 0:
-                  await accountInfo.cosmos.sendDelegateMsg(
-                    amountConfig.amount,
-                    validators[validatorIdx].operator_address,
-                    memoConfig.memo,
-                    stdFee,
-                    {
-                      preferNoSetFee: true,
-                      preferNoSetMemo: true,
-                    },
-                    undefined
-                  );
-                  break;
-                case 1:
-                  await accountInfo.cosmos.sendUndelegateMsg(
-                    amountConfig.amount,
-                    validators[validatorIdx].operator_address,
-                    memoConfig.memo,
-                    stdFee,
-                    {
-                      preferNoSetFee: true,
-                      preferNoSetMemo: true,
-                    },
-                    undefined
-                  );
-                  break;
-              }
+              const msgs = [
+                {
+                  type: "",
+                  value: {},
+                },
+              ];
+              await accountInfo.cosmos.sendMsgs(
+                "",
+                {
+                  aminoMsgs: msgs,
+                  protoMsgs: msgs.map(() => {
+                    return {
+                      typeUrl: "",
+                      value: new Uint8Array(),
+                    };
+                  }),
+                },
+                memoConfig.memo,
+                stdFee,
+                {
+                  preferNoSetFee: true,
+                  preferNoSetMemo: true,
+                },
+                undefined
+              );
 
               history.replace("/");
             } catch (e) {
@@ -138,7 +129,7 @@ export const StakingPage: FunctionComponent = observer(() => {
                 type: "warning",
                 placement: "top-center",
                 duration: 5,
-                content: `Fail to staking: ${e.message}`,
+                content: `Fail to cross chain: ${e.message}`,
                 canDelete: true,
                 transition: {
                   duration: 0.25,
@@ -152,20 +143,14 @@ export const StakingPage: FunctionComponent = observer(() => {
           <div>
             <Input
               type="select"
-              label="Operation"
-              defaultValue={optionIdx}
-              options={options}
+              label="Destination Chain"
+              defaultValue={"Ethereum"}
+              options={["Ethereum", "Binance Smart Chain", "Polygon", "Tron"]}
             />
-            <Input
-              type="select"
-              label="Validator"
-              defaultValue={validatorIdx}
-              options={validators.reduce((pre, cur) => {
-                return pre.concat(
-                  `${cur.description.moniker} (${cur.operator_address})` ??
-                    cur.operator_address
-                );
-              }, [] as string[])}
+            <AddressInput
+              recipientConfig={recipientConfig}
+              memoConfig={memoConfig}
+              label={intl.formatMessage({ id: "send.input.recipient" })}
             />
             <CoinInput
               amountConfig={amountConfig}

@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 
 import { HeaderLayout } from "../../layouts";
 
@@ -22,6 +22,7 @@ import { useIntl } from "react-intl";
 import { Staking } from "@keplr-wallet/stores";
 import { useNotification } from "../../components/notification";
 import { MsgEditValidator } from "@keplr-wallet/proto-types/cosmos/staking/v1beta1/tx";
+import { Dec, DecUtils } from "@keplr-wallet/unit";
 
 export const ValidatorEditPage: FunctionComponent = observer(() => {
   const history = useHistory();
@@ -50,13 +51,19 @@ export const ValidatorEditPage: FunctionComponent = observer(() => {
   const validatorAddress = Bech32Address.fromBech32(
     accountInfo.bech32Address
   ).toBech32(chainStore.current.bech32Config.bech32PrefixValAddr);
-  const validator = bondedValidators.validators
-    .concat(unbondingValidators.validators)
-    .concat(unbondedValidators.validators)
-    .find((val) => val.operator_address === validatorAddress);
+  // const validator = ;
+  // if (validator === undefined) {
+  //   throw new Error("Invalid validator");
+  // }
+
+  const [validator] = useState(() =>
+    bondedValidators.validators
+      .concat(unbondingValidators.validators)
+      .concat(unbondedValidators.validators)
+      .find((val) => val.operator_address === validatorAddress)
+  );
   if (validator === undefined) {
-    history.goBack();
-    return <div />;
+    throw new Error("Invalid validator");
   }
 
   const intl = useIntl();
@@ -114,16 +121,25 @@ export const ValidatorEditPage: FunctionComponent = observer(() => {
                   value: {
                     description: {
                       moniker:
-                        validator.description?.moniker ?? "[do-not-modify]",
+                        validator.description.moniker !== ""
+                          ? validator.description.moniker
+                          : undefined,
                       identity:
-                        validator.description?.identity ?? "[do-not-modify]",
+                        validator.description.identity !== ""
+                          ? validator.description.identity
+                          : undefined,
                       website:
-                        validator.description?.website ?? "[do-not-modify]",
+                        validator.description.website !== ""
+                          ? validator.description.website
+                          : undefined,
                       security_contact:
-                        validator.description?.security_contact ??
-                        "[do-not-modify]",
+                        validator.description.security_contact !== ""
+                          ? validator.description.security_contact
+                          : undefined,
                       details:
-                        validator.description?.details ?? "[do-not-modify]",
+                        validator.description.details !== ""
+                          ? validator.description.details
+                          : undefined,
                     },
                     validator_address: validator.operator_address,
                     commission_rate: validator.commission.commission_rates.rate,
@@ -140,21 +156,22 @@ export const ValidatorEditPage: FunctionComponent = observer(() => {
                       typeUrl: "/cosmos.staking.v1beta1.MsgEditValidator",
                       value: MsgEditValidator.encode({
                         description: {
-                          moniker:
-                            msg.value.description?.moniker ?? "[do-not-modify]",
-                          identity:
-                            msg.value.description?.identity ??
-                            "[do-not-modify]",
-                          website:
-                            msg.value.description?.website ?? "[do-not-modify]",
+                          moniker: msg.value.description.moniker ?? "",
+                          identity: msg.value.description.identity ?? "",
+                          website: msg.value.description.website ?? "",
                           securityContact:
-                            msg.value.description?.security_contact ??
-                            "[do-not-modify]",
+                            msg.value.description.security_contact ?? "",
                           details:
-                            msg.value.description?.details ?? "[do-not-modify]",
+                            msg.value.description.details ?? "[do-not-modify]",
                         },
                         validatorAddress: msg.value.validator_address,
-                        commissionRate: msg.value.commission_rate,
+                        commissionRate: new Dec(msg.value.commission_rate)
+                          .mul(
+                            DecUtils.getTenExponentNInPrecisionRange(
+                              amountConfig.sendCurrency?.coinDecimals ?? 0
+                            )
+                          )
+                          .toString(0),
                         minSelfDelegation: msg.value.min_self_delegation,
                       }).finish(),
                     };
@@ -162,7 +179,11 @@ export const ValidatorEditPage: FunctionComponent = observer(() => {
                 },
                 memoConfig.memo,
                 stdFee,
-                undefined,
+                {
+                  preferNoSetFee: true,
+                  preferNoSetMemo: true,
+                  disableBalanceCheck: true,
+                },
                 undefined
               );
 
@@ -187,44 +208,90 @@ export const ValidatorEditPage: FunctionComponent = observer(() => {
           <div>
             <Input
               type="text"
-              label="valAddress"
+              label="ValAddress"
               disabled
-              value={validator.operator_address}
+              defaultValue={validator.operator_address}
             />
             <Input
               type="text"
-              label="moniker"
-              value={validator.description.moniker}
+              label="Moniker"
+              defaultValue={validator.description.moniker}
+              onChange={(e) => {
+                e.preventDefault();
+                validator.description.moniker = e.target.value;
+              }}
             />
             <Input
               type="text"
-              label="identity"
-              value={validator.description.identity}
+              label="Identity"
+              defaultValue={validator.description.identity}
+              onChange={(e) => {
+                e.preventDefault();
+                validator.description.identity = e.target.value;
+              }}
             />
             <Input
               type="text"
-              label="website"
-              value={validator.description.website}
+              label="Website"
+              defaultValue={validator.description.website}
+              onChange={(e) => {
+                e.preventDefault();
+                validator.description.website = e.target.value;
+              }}
             />
             <Input
               type="text"
-              label="security"
-              value={validator.description.security_contact}
+              label="Security Contact"
+              defaultValue={validator.description.security_contact}
+              onChange={(e) => {
+                e.preventDefault();
+                validator.description.security_contact = e.target.value;
+              }}
             />
             <Input
               type="text"
-              label="details"
-              value={validator.description.details}
+              label="Details"
+              defaultValue={validator.description.details}
+              onChange={(e) => {
+                e.preventDefault();
+                validator.description.details = e.target.value;
+              }}
             />
             <Input
               type="number"
-              label="commissionRate"
-              value={validator.commission.commission_rates.rate}
+              label="Commission Rate"
+              defaultValue={parseFloat(
+                validator.commission.commission_rates.rate
+              ).toString()}
+              onChange={(e) => {
+                e.preventDefault();
+                validator.commission.commission_rates.rate = new Dec(
+                  e.target.value
+                ).toString(amountConfig.sendCurrency?.coinDecimals ?? 0);
+              }}
             />
             <Input
               type="number"
-              label="minSelfDelegation"
-              value={validator.min_self_delegation}
+              label="Min Self Delegation"
+              defaultValue={parseFloat(
+                new Dec(validator.min_self_delegation)
+                  .quo(
+                    DecUtils.getTenExponentNInPrecisionRange(
+                      amountConfig.sendCurrency?.coinDecimals ?? 0
+                    )
+                  )
+                  .toString(amountConfig.sendCurrency?.coinDecimals ?? 0)
+              )}
+              onChange={(e) => {
+                e.preventDefault();
+                validator.min_self_delegation = new Dec(e.target.value)
+                  .mul(
+                    DecUtils.getTenExponentNInPrecisionRange(
+                      amountConfig.sendCurrency?.coinDecimals ?? 0
+                    )
+                  )
+                  .toString(amountConfig.sendCurrency?.coinDecimals ?? 0);
+              }}
             />
             <MemoInput
               memoConfig={memoConfig}

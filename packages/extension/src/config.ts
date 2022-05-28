@@ -102,55 +102,74 @@ import {
 } from "./config.var";
 
 export const EmbedChainInfos: ChainInfo[] = [
-  // {
-  //   rpc: "https://fx-json.functionx.io:26657",
-  //   rpcConfig: undefined,
-  //   rest: "https://fx-rest.functionx.io",
-  //   restConfig: undefined,
-  //   chainId: "fxcore",
-  //   chainName: "f(x)Core",
-  //   stakeCurrency: {
-  //     coinDenom: "FX",
-  //     coinMinimalDenom: "FX",
-  //     coinDecimals: 18,
-  //     coinGeckoId: "fx-coin",
-  //   },
-  //   walletUrl:
-  //     process.env.NODE_ENV === "production"
-  //       ? "https://explorer.functionx.io/validators"
-  //       : "http://localhost:8080/#/cosmoshub/stake",
-  //   walletUrlForStaking:
-  //     process.env.NODE_ENV === "production"
-  //       ? "https://explorer.functionx.io/validators"
-  //       : "http://localhost:8080/#/cosmoshub/stake",
-  //   bip44: {
-  //     coinType: 118,
-  //   },
-  //   bech32Config: Bech32Address.defaultBech32Config("fx"),
-  //   currencies: [
-  //     {
-  //       coinDenom: "FX",
-  //       coinMinimalDenom: "FX",
-  //       coinDecimals: 18,
-  //       coinGeckoId: "fx-coin",
-  //     },
-  //   ],
-  //   feeCurrencies: [
-  //     {
-  //       coinDenom: "FX",
-  //       coinMinimalDenom: "FX",
-  //       coinDecimals: 18,
-  //       coinGeckoId: "fx-coin",
-  //     },
-  //   ],
-  //   coinType: 118,
-  //   gasPriceStep: {
-  //     low: 4000 * Math.pow(10, 9),
-  //     average: 4000 * Math.pow(10, 9),
-  //     high: 4000 * Math.pow(10, 9),
-  //   },
-  //   features: ["ibc-transfer", "ibc-go"],
-  // },
+  {
+    rpc: "https://fx-json.functionx.io:26657",
+    rpcConfig: undefined,
+    rest: "https://fx-rest.functionx.io",
+    restConfig: undefined,
+    chainId: "fxcore",
+    chainName: "f(x)Core",
+    stakeCurrency: {
+      coinDenom: "FX",
+      coinMinimalDenom: "FX",
+      coinDecimals: 18,
+      coinGeckoId: "fx-coin",
+    },
+    walletUrl:
+      process.env.NODE_ENV === "production"
+        ? "https://explorer.functionx.io/validators"
+        : "http://localhost:8080/#/cosmoshub/stake",
+    walletUrlForStaking:
+      process.env.NODE_ENV === "production"
+        ? "https://explorer.functionx.io/validators"
+        : "http://localhost:8080/#/cosmoshub/stake",
+    bip44: {
+      coinType: 118,
+    },
+    bech32Config: Bech32Address.defaultBech32Config("fx"),
+    currencies: [
+      {
+        coinDenom: "FX",
+        coinMinimalDenom: "FX",
+        coinDecimals: 18,
+        coinGeckoId: "fx-coin",
+      },
+      {
+        coinDenom: "ETH-PUNDIX",
+        coinMinimalDenom:
+          "ibc/55367B7B6572631B78A93C66EF9FDFCE87CDE372CC4ED7848DA78C1EB1DCDD78",
+        coinDecimals: 18,
+        coinGeckoId: "pundi-x-2",
+      },
+      {
+        coinDenom: "BSC-PURSE",
+        coinMinimalDenom: "bsc0x29a63F4B209C29B4DC47f06FFA896F32667DAD2C",
+        coinDecimals: 18,
+        coinGeckoId: "pundi-x-purse",
+      },
+      {
+        coinDenom: "Tron-USDT",
+        coinMinimalDenom: "tronTKLDunqAynYcXRktcYHqncp3R6nJeEXLd5",
+        coinDecimals: 18,
+        coinGeckoId: "tether",
+      },
+    ],
+    feeCurrencies: [
+      {
+        coinDenom: "FX",
+        coinMinimalDenom: "FX",
+        coinDecimals: 18,
+        coinGeckoId: "fx-coin",
+      },
+    ],
+    coinType: 118,
+    gasPriceStep: {
+      low: 4000 * Math.pow(10, 9),
+      average: 4000 * Math.pow(10, 9),
+      high: 4000 * Math.pow(10, 9),
+    },
+    features: ["ibc-transfer", "ibc-go"],
+  },
   {
     rpc: "https://testnet-fx-json.functionx.io:26657",
     rpcConfig: undefined,
@@ -183,6 +202,12 @@ export const EmbedChainInfos: ChainInfo[] = [
         coinDecimals: 18,
         coinGeckoId: "fx-coin",
       },
+      {
+        coinDenom: "Kovan-USDT",
+        coinMinimalDenom: "eth0xD69133f9A0206b3340d9622F2eBc4571022b3b5f",
+        coinDecimals: 6,
+        coinGeckoId: "tether",
+      },
     ],
     feeCurrencies: [
       {
@@ -198,7 +223,7 @@ export const EmbedChainInfos: ChainInfo[] = [
       average: 4000 * Math.pow(10, 9),
       high: 4100 * Math.pow(10, 9),
     },
-    features: ["ibc-transfer", "ibc-go"],
+    features: ["ibc-transfer"],
   },
   /*{
     rpc: COSMOS_RPC_ENDPOINT,

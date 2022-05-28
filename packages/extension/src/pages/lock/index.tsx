@@ -28,13 +28,9 @@ export const LockPage: FunctionComponent = observer(() => {
 
   const passwordRef = useRef<HTMLInputElement | null>();
 
-  let defPwd = "12345678";
-  if (process.env.NODE_ENV === "production") {
-    defPwd = "";
-  }
   const { register, handleSubmit, setError, errors } = useForm<FormData>({
     defaultValues: {
-      password: defPwd,
+      password: process.env.NODE_ENV === "production" ? "" : "12345678",
     },
   });
 

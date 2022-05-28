@@ -10,7 +10,7 @@ import classnames from "classnames";
 import { FormattedMessage } from "react-intl";
 import { useHistory } from "react-router";
 
-export const GovView: FunctionComponent = observer(() => {
+export const GravityView: FunctionComponent = observer(() => {
   const history = useHistory();
 
   return (
@@ -25,7 +25,7 @@ export const GovView: FunctionComponent = observer(() => {
               styleStake.paragraphMain
             )}
           >
-            <FormattedMessage id="main.gov.message.proposals" />
+            <FormattedMessage id="main.gravity.message.crosschain" />
           </p>
         </div>
         <div style={{ flex: 1 }} />
@@ -36,10 +36,10 @@ export const GovView: FunctionComponent = observer(() => {
           onClick={(e) => {
             e.preventDefault();
 
-            history.push("/vote");
+            history.push("/gravity");
           }}
         >
-          <FormattedMessage id="main.gov.button.vote" />
+          <FormattedMessage id="main.gravity.button.send" />
         </Button>
       </div>
     </div>

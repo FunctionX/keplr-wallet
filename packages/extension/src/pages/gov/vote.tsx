@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 
 import { HeaderLayout } from "../../layouts";
 
@@ -10,7 +10,7 @@ import style from "./style.module.scss";
 
 import { useHistory } from "react-router";
 import { useStore } from "../../stores";
-import { FeeButtons, MemoInput } from "../../components/form";
+import { FeeButtons, Input, MemoInput } from "../../components/form";
 import {
   useAmountConfig,
   useFeeConfig,
@@ -34,7 +34,9 @@ export const VotePage: FunctionComponent = observer(() => {
   const { chainStore, queriesStore, accountStore, priceStore } = useStore();
   const accountInfo = accountStore.getAccount(chainStore.current.chainId);
   const queries = queriesStore.get(chainStore.current.chainId);
-  const proposals = queries.cosmos.queryGovernance.proposals;
+  const proposals = queries.cosmos.queryGovernance.proposals.filter((p) => {
+    return p.proposalStatus == 2;
+  });
 
   const notification = useNotification();
 
@@ -56,6 +58,11 @@ export const VotePage: FunctionComponent = observer(() => {
     amountConfig,
     gasConfig
   );
+  const options = ["Yes", "No", "NoWithVeto", "Abstain"];
+  const [vote, setVote] = useState<"Yes" | "No" | "NoWithVeto" | "Abstain">(
+    "Yes"
+  );
+  const [proposalIdx] = useState(0);
 
   return (
     <HeaderLayout
@@ -84,11 +91,15 @@ export const VotePage: FunctionComponent = observer(() => {
             try {
               const stdFee = feeConfig.toStdFee();
               await accountInfo.cosmos.sendGovVoteMsg(
-                "",
-                "Yes",
+                proposals[proposalIdx].id,
+                vote,
                 memoConfig.memo,
                 stdFee,
-                undefined,
+                {
+                  preferNoSetFee: true,
+                  preferNoSetMemo: true,
+                  disableBalanceCheck: true,
+                },
                 undefined
               );
 
@@ -111,16 +122,36 @@ export const VotePage: FunctionComponent = observer(() => {
       >
         <div className={style.formInnerContainer}>
           <div>
-            {/*<Input type="select" label="proposal" />*/}
-            <select className="form-select">
-              {proposals.map((proposal, index) => {
-                return (
-                  <option value={index} key={index}>
-                    {proposal.title}
-                  </option>
-                );
-              })}
-            </select>
+            <Input
+              type="select"
+              label="Proposal"
+              defaultValue={proposalIdx}
+              options={proposals.reduce((pre, cur) => {
+                return pre.concat(`#${cur.id} ${cur.title}}`);
+              }, [] as string[])}
+            />
+            <Input
+              type="select"
+              label="Option"
+              options={options}
+              onChange={(e) => {
+                e.preventDefault();
+                switch (e.target.value) {
+                  case "0":
+                    setVote("Yes");
+                    break;
+                  case "1":
+                    setVote("No");
+                    break;
+                  case "2":
+                    setVote("NoWithVeto");
+                    break;
+                  case "3":
+                    setVote("Abstain");
+                    break;
+                }
+              }}
+            />
             <MemoInput
               memoConfig={memoConfig}
               label={intl.formatMessage({ id: "send.input.memo" })}

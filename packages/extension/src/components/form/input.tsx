@@ -23,6 +23,8 @@ export interface InputProps {
   error?: string;
 
   append?: React.ReactElement;
+
+  options?: string[];
 }
 
 // eslint-disable-next-line react/display-name
@@ -30,7 +32,7 @@ export const Input = forwardRef<
   HTMLInputElement,
   InputProps & React.InputHTMLAttributes<HTMLInputElement>
 >((props, ref) => {
-  const { type, label, text, error, append } = props;
+  const { type, label, text, error, append, options } = props;
 
   const attributes = { ...props };
   delete attributes.className;
@@ -66,7 +68,17 @@ export const Input = forwardRef<
           type={type}
           innerRef={ref}
           {...attributes}
-        />
+        >
+          {type === "select"
+            ? options?.map((opt, index) => {
+                return (
+                  <option value={index} key={index}>
+                    {opt}
+                  </option>
+                );
+              })
+            : null}
+        </ReactStrapInput>
         {append}
       </InputGroup>
       {error ? (

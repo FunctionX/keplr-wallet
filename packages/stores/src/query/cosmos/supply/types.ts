@@ -1,7 +1,13 @@
 export type SupplyTotal = {
-  amount: {
-    denom: string;
-    amount: string;
+  supply: [
+    {
+      denom: string;
+      amount: string;
+    }
+  ];
+  pagination: {
+    next_key: string | undefined;
+    total: string;
   };
 };
 

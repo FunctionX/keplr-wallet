@@ -17,8 +17,9 @@
   "main.gov.message.proposals": "Proposals",
   "main.gov.button.vote": "Vote",
 
-  "main.gravity.message.crosschain": "CrossChain",
-  "main.gravity.button.send": "Send",
+  "main.gravity.transfer.title": "Gravity Bridge",
+  "main.gravity.transfer.button": "Transfer",
+  "main.gravity.transfer.paragraph": "Send tokens over Cross Chain",
 
   "main.stake.message.pending-staking-reward": "Pending Staking Reward",
   "main.stake.message.stake": "Stake",

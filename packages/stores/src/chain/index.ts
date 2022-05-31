@@ -215,6 +215,10 @@ export class ChainInfoInner<C extends ChainInfo = ChainInfo>
     return this.raw.stakeCurrency;
   }
 
+  get rewardCurrency(): Currency | undefined {
+    return this.raw.rewardCurrency;
+  }
+
   get alternativeBIP44s(): BIP44[] | undefined {
     return this.raw.alternativeBIP44s;
   }

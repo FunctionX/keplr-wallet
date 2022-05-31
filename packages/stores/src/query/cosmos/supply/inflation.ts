@@ -35,7 +35,7 @@ export class ObservableQueryInflation {
     return (
       this._queryMint.error ??
       this._queryPool.error ??
-      this._querySupplyTotal.getQueryStakeDenom().error
+      this._querySupplyTotal.getQuery().error
     );
   }
 
@@ -43,7 +43,7 @@ export class ObservableQueryInflation {
     return (
       this._queryMint.isFetching ||
       this._queryPool.isFetching ||
-      this._querySupplyTotal.getQueryStakeDenom().isFetching
+      this._querySupplyTotal.getQuery().isFetching
     );
   }
 
@@ -85,10 +85,7 @@ export class ObservableQueryInflation {
           if (epochDuration) {
             const epochProvision = this._queryOsmosisEpochProvisions
               .epochProvisions;
-            if (
-              epochProvision &&
-              this._querySupplyTotal.getQueryStakeDenom().response
-            ) {
+            if (epochProvision && this._querySupplyTotal.getQuery().response) {
               const mintingEpochProvision = new Dec(
                 epochProvision
                   .toDec()
@@ -118,7 +115,7 @@ export class ObservableQueryInflation {
 
       if (
         this._queryPool.response &&
-        this._querySupplyTotal.getQueryStakeDenom().response
+        this._querySupplyTotal.getQuery().response
       ) {
         const bondedToken = new Dec(
           this._queryPool.response.data.pool.bonded_tokens
@@ -130,8 +127,13 @@ export class ObservableQueryInflation {
             return DecUtils.getPrecisionDec(8 + 6).toString();
           }
 
-          return this._querySupplyTotal.getQueryStakeDenom().response!.data
-            .amount.amount;
+          return (
+            this._querySupplyTotal
+              .getQuery()
+              .response!.data.supply.find((v) => {
+                return v.denom == chainInfo.stakeCurrency.coinMinimalDenom;
+              })?.amount ?? "0"
+          );
         })();
         const total = new Dec(totalStr);
         if (total.gt(new Dec(0))) {

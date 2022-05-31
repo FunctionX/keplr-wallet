@@ -15,6 +15,7 @@ export interface ChainInfo {
    * You can get actual currency information from Currencies.
    */
   readonly stakeCurrency: Currency;
+  readonly rewardCurrency?: Currency;
   readonly walletUrl?: string;
   readonly walletUrlForStaking?: string;
   readonly bip44: BIP44;

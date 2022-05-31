@@ -109,6 +109,9 @@ function setOutputHash(root, hash) {
       "cosmwasm/wasm/v1/tx.proto",
       "ibc/applications/transfer/v1/tx.proto",
       "secret/compute/v1beta1/msg.proto",
+      "fx/gravity/v1/tx.proto",
+      "fx/crosschain/v1/tx.proto",
+      "fx/ibc/applications/transfer/v1/tx.proto",
     ];
 
     const thirdPartyInputs = ["tendermint/crypto/keys.proto"];

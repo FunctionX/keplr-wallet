@@ -9,9 +9,23 @@ import classnames from "classnames";
 
 import { FormattedMessage } from "react-intl";
 import { useHistory } from "react-router";
+import { Dec } from "@keplr-wallet/unit";
+import { useStore } from "../../stores";
 
 export const GravityView: FunctionComponent = observer(() => {
   const history = useHistory();
+
+  const { chainStore, accountStore, queriesStore } = useStore();
+
+  const accountInfo = accountStore.getAccount(chainStore.current.chainId);
+  const queries = queriesStore.get(chainStore.current.chainId);
+  const queryBalances = queries.queryBalances.getQueryBech32Address(
+    accountInfo.bech32Address
+  );
+
+  const hasAssets =
+    queryBalances.balances.find((bal) => bal.balance.toDec().gt(new Dec(0))) !==
+    undefined;
 
   return (
     <div>
@@ -25,7 +39,17 @@ export const GravityView: FunctionComponent = observer(() => {
               styleStake.paragraphMain
             )}
           >
-            <FormattedMessage id="main.gravity.message.crosschain" />
+            <FormattedMessage id="main.gravity.transfer.title" />
+          </p>
+          <p
+            className={classnames(
+              "h4",
+              "my-0",
+              "font-weight-normal",
+              styleStake.paragraphSub
+            )}
+          >
+            <FormattedMessage id="main.gravity.transfer.paragraph" />
           </p>
         </div>
         <div style={{ flex: 1 }} />
@@ -33,13 +57,14 @@ export const GravityView: FunctionComponent = observer(() => {
           className={styleStake.button}
           color="primary"
           size="sm"
+          disabled={!hasAssets}
           onClick={(e) => {
             e.preventDefault();
 
             history.push("/gravity");
           }}
         >
-          <FormattedMessage id="main.gravity.button.send" />
+          <FormattedMessage id="main.gravity.transfer.button" />
         </Button>
       </div>
     </div>

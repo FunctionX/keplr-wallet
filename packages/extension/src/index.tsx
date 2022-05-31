@@ -64,6 +64,7 @@ import {
   ValidatorListPage,
 } from "./pages/validator";
 import { GravityPage } from "./pages/gravity";
+import { FxIBCTransferPage } from "./pages/ibc-transfer/fx";
 
 window.keplr = new Keplr(
   manifest.version,
@@ -175,6 +176,11 @@ ReactDOM.render(
                   />
                   <Route exact path="/vote" component={VotePage} />
                   <Route exact path="/gravity" component={GravityPage} />
+                  <Route
+                    exact
+                    path="/fx-ibc-transfer"
+                    component={FxIBCTransferPage}
+                  />
                   <Route
                     exact
                     path="/ibc-transfer"

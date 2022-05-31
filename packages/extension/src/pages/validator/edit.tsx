@@ -2,7 +2,13 @@ import React, { FunctionComponent, useEffect, useState } from "react";
 
 import { HeaderLayout } from "../../layouts";
 
-import { Button } from "reactstrap";
+import {
+  Button,
+  FormGroup,
+  Input as ReactStrapInput,
+  InputGroup,
+  Label,
+} from "reactstrap";
 
 import { observer } from "mobx-react-lite";
 
@@ -23,6 +29,10 @@ import { Staking } from "@keplr-wallet/stores";
 import { useNotification } from "../../components/notification";
 import { MsgEditValidator } from "@keplr-wallet/proto-types/cosmos/staking/v1beta1/tx";
 import { Dec, DecUtils } from "@keplr-wallet/unit";
+import classnames from "classnames";
+import styleInput from "../../components/form/input.module.scss";
+import styleCoinInput from "../../components/form/coin-input.module.scss";
+import { Address } from "../../components/address";
 
 export const ValidatorEditPage: FunctionComponent = observer(() => {
   const history = useHistory();
@@ -51,10 +61,6 @@ export const ValidatorEditPage: FunctionComponent = observer(() => {
   const validatorAddress = Bech32Address.fromBech32(
     accountInfo.bech32Address
   ).toBech32(chainStore.current.bech32Config.bech32PrefixValAddr);
-  // const validator = ;
-  // if (validator === undefined) {
-  //   throw new Error("Invalid validator");
-  // }
 
   const [validator] = useState(() =>
     bondedValidators.validators
@@ -70,24 +76,35 @@ export const ValidatorEditPage: FunctionComponent = observer(() => {
 
   const notification = useNotification();
 
-  const current = chainStore.current;
-
-  const memoConfig = useMemoConfig(chainStore, current.chainId);
-  const gasConfig = useGasConfig(chainStore, current.chainId, 120000);
+  const memoConfig = useMemoConfig(chainStore, chainStore.current.chainId);
+  const gasConfig = useGasConfig(
+    chainStore,
+    chainStore.current.chainId,
+    120000
+  );
   const amountConfig = useAmountConfig(
     chainStore,
     queriesStore,
-    current.chainId,
+    chainStore.current.chainId,
     accountInfo.bech32Address
   );
   const feeConfig = useFeeConfig(
     chainStore,
     queriesStore,
-    current.chainId,
+    chainStore.current.chainId,
     accountInfo.bech32Address,
     amountConfig,
     gasConfig
   );
+
+  const [randomId] = useState(() => {
+    const bytes = new Uint8Array(4);
+    crypto.getRandomValues(bytes);
+    return Buffer.from(bytes).toString("hex");
+  });
+
+  const configError = memoConfig.error ?? gasConfig.error ?? feeConfig.error;
+  const txStateIsValid = configError == null;
 
   return (
     <HeaderLayout
@@ -156,11 +173,15 @@ export const ValidatorEditPage: FunctionComponent = observer(() => {
                       typeUrl: "/cosmos.staking.v1beta1.MsgEditValidator",
                       value: MsgEditValidator.encode({
                         description: {
-                          moniker: msg.value.description.moniker ?? "",
-                          identity: msg.value.description.identity ?? "",
-                          website: msg.value.description.website ?? "",
+                          moniker:
+                            msg.value.description.moniker ?? "[do-not-modify]",
+                          identity:
+                            msg.value.description.identity ?? "[do-not-modify]",
+                          website:
+                            msg.value.description.website ?? "[do-not-modify]",
                           securityContact:
-                            msg.value.description.security_contact ?? "",
+                            msg.value.description.security_contact ??
+                            "[do-not-modify]",
                           details:
                             msg.value.description.details ?? "[do-not-modify]",
                         },
@@ -206,12 +227,35 @@ export const ValidatorEditPage: FunctionComponent = observer(() => {
       >
         <div className={style.formInnerContainer}>
           <div>
-            <Input
-              type="text"
-              label="ValAddress"
-              disabled
-              defaultValue={validator.operator_address}
-            />
+            <FormGroup>
+              <Label
+                for={`selector-${randomId}`}
+                className="form-control-label"
+                style={{ width: "100%" }}
+              >
+                Moniker
+                <div className={classnames(styleCoinInput.balance)}>
+                  <Address maxCharacters={32} lineBreakBeforePrefix={false}>
+                    {validator.operator_address}
+                  </Address>
+                </div>
+              </Label>
+              <InputGroup>
+                <ReactStrapInput
+                  id={randomId}
+                  className={classnames(
+                    "form-control-alternative",
+                    styleInput.input
+                  )}
+                  type="text"
+                  defaultValue={validator.description.moniker}
+                  onChange={(e) => {
+                    e.preventDefault();
+                    validator.description.moniker = e.target.value;
+                  }}
+                />
+              </InputGroup>
+            </FormGroup>
             <Input
               type="text"
               label="Moniker"
@@ -317,8 +361,8 @@ export const ValidatorEditPage: FunctionComponent = observer(() => {
             type="submit"
             color="primary"
             block
-            data-loading={accountInfo.isSendingMsg === "send"}
-            disabled={!accountInfo.isReadyToSendMsgs}
+            data-loading={accountInfo.isSendingMsg === "editValidator"}
+            disabled={!accountInfo.isReadyToSendMsgs || !txStateIsValid}
           >
             {intl.formatMessage({
               id: "send.button.send",

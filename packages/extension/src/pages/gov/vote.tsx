@@ -2,7 +2,15 @@ import React, { FunctionComponent, useEffect, useState } from "react";
 
 import { HeaderLayout } from "../../layouts";
 
-import { Button } from "reactstrap";
+import {
+  Button,
+  ButtonDropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
+  FormGroup,
+  Label,
+} from "reactstrap";
 
 import { observer } from "mobx-react-lite";
 
@@ -10,7 +18,7 @@ import style from "./style.module.scss";
 
 import { useHistory } from "react-router";
 import { useStore } from "../../stores";
-import { FeeButtons, Input, MemoInput } from "../../components/form";
+import { FeeButtons, MemoInput } from "../../components/form";
 import {
   useAmountConfig,
   useFeeConfig,
@@ -19,6 +27,11 @@ import {
 } from "@keplr-wallet/hooks";
 import { useIntl } from "react-intl";
 import { useNotification } from "../../components/notification";
+import classnames from "classnames";
+import styleCoinInput from "../../components/form/coin-input.module.scss";
+import { Address } from "../../components/address";
+
+type Vote = "Yes" | "No" | "NoWithVeto" | "Abstain";
 
 export const VotePage: FunctionComponent = observer(() => {
   const history = useHistory();
@@ -59,10 +72,22 @@ export const VotePage: FunctionComponent = observer(() => {
     gasConfig
   );
   const options = ["Yes", "No", "NoWithVeto", "Abstain"];
-  const [vote, setVote] = useState<"Yes" | "No" | "NoWithVeto" | "Abstain">(
-    "Yes"
+  const [vote, setVote] = useState<Vote>("Yes");
+  const [isOpenVoteSelector, setIsOpenVoteSelector] = useState(false);
+
+  const [proposal, setProposal] = useState(
+    proposals.length > 0 ? proposals[0] : { id: "", title: "" }
   );
-  const [proposalIdx] = useState(0);
+  const [isOpenProposalSelector, setIsOpenProposalSelector] = useState(false);
+
+  const [randomId] = useState(() => {
+    const bytes = new Uint8Array(4);
+    crypto.getRandomValues(bytes);
+    return Buffer.from(bytes).toString("hex");
+  });
+
+  const configError = memoConfig.error ?? gasConfig.error ?? feeConfig.error;
+  const txStateIsValid = configError == null;
 
   return (
     <HeaderLayout
@@ -91,7 +116,7 @@ export const VotePage: FunctionComponent = observer(() => {
             try {
               const stdFee = feeConfig.toStdFee();
               await accountInfo.cosmos.sendGovVoteMsg(
-                proposals[proposalIdx].id,
+                proposal.id,
                 vote,
                 memoConfig.memo,
                 stdFee,
@@ -122,36 +147,86 @@ export const VotePage: FunctionComponent = observer(() => {
       >
         <div className={style.formInnerContainer}>
           <div>
-            <Input
-              type="select"
-              label="Proposal"
-              defaultValue={proposalIdx}
-              options={proposals.reduce((pre, cur) => {
-                return pre.concat(`#${cur.id} ${cur.title}}`);
-              }, [] as string[])}
-            />
-            <Input
-              type="select"
-              label="Option"
-              options={options}
-              onChange={(e) => {
-                e.preventDefault();
-                switch (e.target.value) {
-                  case "0":
-                    setVote("Yes");
-                    break;
-                  case "1":
-                    setVote("No");
-                    break;
-                  case "2":
-                    setVote("NoWithVeto");
-                    break;
-                  case "3":
-                    setVote("Abstain");
-                    break;
-                }
-              }}
-            />
+            <FormGroup>
+              <Label
+                for={`selector-${randomId}`}
+                className="form-control-label"
+                style={{ width: "100%" }}
+              >
+                Proposal
+                <div className={classnames(styleCoinInput.balance)}>
+                  <Address maxCharacters={32} lineBreakBeforePrefix={false}>
+                    {proposal.title}
+                  </Address>
+                </div>
+              </Label>
+              <ButtonDropdown
+                id={`selector-${randomId}`}
+                className={classnames(styleCoinInput.tokenSelector, {
+                  disabled: false,
+                })}
+                isOpen={isOpenProposalSelector}
+                toggle={() => setIsOpenProposalSelector((value) => !value)}
+                disabled={proposals.length === 0}
+              >
+                <DropdownToggle caret>
+                  {proposal.id !== "" ? `#${proposal.id}` : ""}
+                </DropdownToggle>
+                <DropdownMenu>
+                  {proposals.map((currency) => {
+                    return (
+                      <DropdownItem
+                        key={currency.id}
+                        active={currency.id === proposal.id}
+                        onClick={(e) => {
+                          e.preventDefault();
+
+                          setProposal(currency);
+                        }}
+                      >
+                        #{currency.id}
+                      </DropdownItem>
+                    );
+                  })}
+                </DropdownMenu>
+              </ButtonDropdown>
+            </FormGroup>
+            <FormGroup>
+              <Label
+                for={`selector-${randomId}`}
+                className="form-control-label"
+                style={{ width: "100%" }}
+              >
+                Option
+              </Label>
+              <ButtonDropdown
+                id={`selector-${randomId}`}
+                className={classnames(styleCoinInput.tokenSelector, {
+                  disabled: false,
+                })}
+                isOpen={isOpenVoteSelector}
+                toggle={() => setIsOpenVoteSelector((value) => !value)}
+              >
+                <DropdownToggle caret>{vote}</DropdownToggle>
+                <DropdownMenu>
+                  {options.map((currency) => {
+                    return (
+                      <DropdownItem
+                        key={currency}
+                        active={currency === vote.toString()}
+                        onClick={(e) => {
+                          e.preventDefault();
+
+                          setVote(currency as Vote);
+                        }}
+                      >
+                        {currency}
+                      </DropdownItem>
+                    );
+                  })}
+                </DropdownMenu>
+              </ButtonDropdown>
+            </FormGroup>
             <MemoInput
               memoConfig={memoConfig}
               label={intl.formatMessage({ id: "send.input.memo" })}
@@ -176,8 +251,8 @@ export const VotePage: FunctionComponent = observer(() => {
             type="submit"
             color="primary"
             block
-            data-loading={accountInfo.isSendingMsg === "send"}
-            disabled={!accountInfo.isReadyToSendMsgs}
+            data-loading={accountInfo.isSendingMsg === "govVote"}
+            disabled={!accountInfo.isReadyToSendMsgs || !txStateIsValid}
           >
             {intl.formatMessage({
               id: "send.button.send",

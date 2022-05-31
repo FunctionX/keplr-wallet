@@ -57,7 +57,7 @@ export const IBCTransferView: FunctionComponent = observer(() => {
         onClick={(e) => {
           e.preventDefault();
 
-          history.push("/ibc-transfer");
+          history.push("/fx-ibc-transfer");
         }}
       >
         <FormattedMessage id="main.ibc.transfer.button" />

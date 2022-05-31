@@ -86,11 +86,6 @@ export const MainPage: FunctionComponent = observer(() => {
 
   const hasTokens = tokens.length > 0;
 
-  const queries = queriesStore.get(chainStore.current.chainId);
-  const proposals = queries.cosmos.queryGovernance.proposals.filter((p) => {
-    return p.proposalStatus == 2;
-  });
-
   return (
     <HeaderLayout
       showChainName
@@ -140,20 +135,11 @@ export const MainPage: FunctionComponent = observer(() => {
           </CardBody>
         </Card>
       ) : null}
-      {proposals.length > 0 ? (
-        <Card className={classnames(style.card, "shadow")}>
-          <CardBody>
-            <GovView />
-          </CardBody>
-        </Card>
-      ) : null}
-      {chainStore.current.features?.includes("gravity") ? (
-        <Card className={classnames(style.card, "shadow")}>
-          <CardBody>
-            <GravityView />
-          </CardBody>
-        </Card>
-      ) : null}
+      <Card className={classnames(style.card, "shadow")}>
+        <CardBody>
+          <GovView />
+        </CardBody>
+      </Card>
       {hasTokens ? (
         <Card className={classnames(style.card, "shadow")}>
           <CardBody>{<TokensView />}</CardBody>
@@ -164,6 +150,14 @@ export const MainPage: FunctionComponent = observer(() => {
         <Card className={classnames(style.card, "shadow")}>
           <CardBody>
             <IBCTransferView />
+          </CardBody>
+        </Card>
+      ) : null}
+      {uiConfigStore.showAdvancedGravityBridge &&
+      chainStore.current.features?.includes("gravity") ? (
+        <Card className={classnames(style.card, "shadow")}>
+          <CardBody>
+            <GravityView />
           </CardBody>
         </Card>
       ) : null}

@@ -141,6 +141,32 @@ export const SettingPage: FunctionComponent = observer(() => {
           ]}
         />
         <PageButton
+          title="Show Advanced Gravity Bridge"
+          onClick={() => {
+            uiConfigStore.setShowAdvancedGravityBridge(
+              !uiConfigStore.showAdvancedGravityBridge
+            );
+          }}
+          icons={[
+            <label
+              key="toggle"
+              className="custom-toggle"
+              style={{ marginBottom: 0 }}
+            >
+              <input
+                type="checkbox"
+                checked={uiConfigStore.showAdvancedGravityBridge}
+                onChange={() => {
+                  uiConfigStore.setShowAdvancedGravityBridge(
+                    !uiConfigStore.showAdvancedGravityBridge
+                  );
+                }}
+              />
+              <span className="custom-toggle-slider rounded-circle" />
+            </label>,
+          ]}
+        />
+        <PageButton
           title={intl.formatMessage({
             id: "setting.credit",
           })}

@@ -6,12 +6,14 @@ import { KVStore } from "@keplr-wallet/common";
 
 export interface UIConfigOptions {
   showAdvancedIBCTransfer: boolean;
+  showAdvancedGravityBridge: boolean;
 }
 
 export class UIConfigStore {
   @observable.deep
   protected options: UIConfigOptions = {
     showAdvancedIBCTransfer: false,
+    showAdvancedGravityBridge: false,
   };
 
   constructor(protected readonly kvStore: KVStore) {
@@ -30,6 +32,18 @@ export class UIConfigStore {
         ...data,
       };
     });
+  }
+
+  get showAdvancedGravityBridge(): boolean {
+    return this.options.showAdvancedGravityBridge;
+  }
+
+  @action
+  setShowAdvancedGravityBridge(value: boolean) {
+    this.options.showAdvancedGravityBridge = value;
+
+    // No need to await
+    this.save();
   }
 
   /**

@@ -8,7 +8,7 @@ import { observer } from "mobx-react-lite";
 
 import styleStake from "./stake.module.scss";
 import classnames from "classnames";
-import { Dec } from "@keplr-wallet/unit";
+import { CoinPretty, Dec, Int } from "@keplr-wallet/unit";
 
 import { useNotification } from "../../components/notification";
 
@@ -28,7 +28,15 @@ export const StakeView: FunctionComponent = observer(() => {
   const rewards = queries.cosmos.queryRewards.getQueryBech32Address(
     accountInfo.bech32Address
   );
-  const stakableReward = rewards.stakableReward;
+  const chainInfo = chainStore.getChain(chainStore.current.chainId);
+  const rewardDenom = chainInfo.rewardCurrency
+    ? chainInfo.rewardCurrency.coinMinimalDenom
+    : chainInfo.stakeCurrency.coinMinimalDenom;
+  const stakableReward =
+    rewards.rewards.find((v) => {
+      return v.currency.coinMinimalDenom === rewardDenom;
+    }) ?? new CoinPretty(chainInfo.stakeCurrency, new Int(0)).ready(false);
+
   const stakable = queries.queryBalances.getQueryBech32Address(
     accountInfo.bech32Address
   ).stakable;

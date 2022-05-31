@@ -117,11 +117,11 @@ export const EmbedChainInfos: ChainInfo[] = [
     },
     walletUrl:
       process.env.NODE_ENV === "production"
-        ? "https://explorer.functionx.io/validators"
+        ? "https://explorer.functionx.io/fxcore/validators"
         : "http://localhost:8080/#/cosmoshub/stake",
     walletUrlForStaking:
       process.env.NODE_ENV === "production"
-        ? "https://explorer.functionx.io/validators"
+        ? "https://explorer.functionx.io/fxcore/validators"
         : "http://localhost:8080/#/cosmoshub/stake",
     bip44: {
       coinType: 118,
@@ -135,23 +135,17 @@ export const EmbedChainInfos: ChainInfo[] = [
         coinGeckoId: "fx-coin",
       },
       {
-        coinDenom: "ETH-PUNDIX",
-        coinMinimalDenom:
-          "ibc/55367B7B6572631B78A93C66EF9FDFCE87CDE372CC4ED7848DA78C1EB1DCDD78",
+        coinDenom: "PUNDIX",
+        coinMinimalDenom: "eth0x0FD10b9899882a6f2fcb5c371E17e70FdEe00C38",
         coinDecimals: 18,
         coinGeckoId: "pundi-x-2",
       },
       {
-        coinDenom: "BSC-PURSE",
-        coinMinimalDenom: "bsc0x29a63F4B209C29B4DC47f06FFA896F32667DAD2C",
+        coinDenom: "PURSE",
+        coinMinimalDenom:
+          "ibc/F08B62C2C1BE9E52942617489CAB1E94537FE3849F8EEC910B142468C340EB0D",
         coinDecimals: 18,
         coinGeckoId: "pundi-x-purse",
-      },
-      {
-        coinDenom: "Tron-USDT",
-        coinMinimalDenom: "tronTKLDunqAynYcXRktcYHqncp3R6nJeEXLd5",
-        coinDecimals: 18,
-        coinGeckoId: "tether",
       },
     ],
     feeCurrencies: [
@@ -168,7 +162,7 @@ export const EmbedChainInfos: ChainInfo[] = [
       average: 4000 * Math.pow(10, 9),
       high: 4000 * Math.pow(10, 9),
     },
-    features: ["ibc-transfer", "ibc-go"],
+    features: ["ibc-transfer", "gravity"],
   },
   {
     rpc: "https://testnet-fx-json.functionx.io:26657",
@@ -185,11 +179,11 @@ export const EmbedChainInfos: ChainInfo[] = [
     },
     walletUrl:
       process.env.NODE_ENV === "production"
-        ? "https://testnet-explorer.functionx.io/validators"
+        ? "https://testnet-explorer.functionx.io/fxcore/validators"
         : "http://localhost:8080/#/cosmoshub/stake",
     walletUrlForStaking:
       process.env.NODE_ENV === "production"
-        ? "https://testnet-explorer.functionx.io/validators"
+        ? "https://testnet-explorer.functionx.io/fxcore/validators"
         : "http://localhost:8080/#/cosmoshub/stake",
     bip44: {
       coinType: 118,
@@ -201,12 +195,33 @@ export const EmbedChainInfos: ChainInfo[] = [
         coinMinimalDenom: "FX",
         coinDecimals: 18,
         coinGeckoId: "fx-coin",
+        coinImageUrl:
+          "https://s2.coinmarketcap.com/static/img/coins/64x64/3884.png",
       },
       {
-        coinDenom: "Kovan-USDT",
+        coinDenom: "PUNDIX",
+        coinMinimalDenom: "eth0xd9EEd31F5731DfC3Ca18f09B487e200F50a6343B",
+        coinDecimals: 18,
+        coinGeckoId: "pundi-x-2",
+        coinImageUrl:
+          "https://s2.coinmarketcap.com/static/img/coins/64x64/9040.png",
+      },
+      {
+        coinDenom: "USDT",
         coinMinimalDenom: "eth0xD69133f9A0206b3340d9622F2eBc4571022b3b5f",
         coinDecimals: 6,
         coinGeckoId: "tether",
+        coinImageUrl:
+          "https://s2.coinmarketcap.com/static/img/coins/64x64/825.png",
+      },
+      {
+        coinDenom: "PURSE",
+        coinMinimalDenom:
+          "ibc/4757BC3AA2C696F7083C825BD3951AE3D1631F2A272EA7AFB9B3E1CCCA8560D4",
+        coinDecimals: 18,
+        coinGeckoId: "pundi-x-purse",
+        coinImageUrl:
+          "https://s2.coinmarketcap.com/static/img/coins/64x64/14538.png",
       },
     ],
     feeCurrencies: [
@@ -222,6 +237,138 @@ export const EmbedChainInfos: ChainInfo[] = [
       low: 4000 * Math.pow(10, 9),
       average: 4000 * Math.pow(10, 9),
       high: 4100 * Math.pow(10, 9),
+    },
+    features: ["ibc-transfer", "gravity"],
+  },
+  {
+    rpc: "https://px-json.functionx.io:26657",
+    rpcConfig: undefined,
+    rest: "https://px-rest.functionx.io",
+    restConfig: undefined,
+    chainId: "PUNDIX",
+    chainName: "Pundi X",
+    stakeCurrency: {
+      coinDenom: "PUNDIX",
+      coinMinimalDenom:
+        "ibc/55367B7B6572631B78A93C66EF9FDFCE87CDE372CC4ED7848DA78C1EB1DCDD78",
+      coinDecimals: 18,
+      coinGeckoId: "pundi-x-2",
+    },
+    rewardCurrency: {
+      coinDenom: "PURSE",
+      coinMinimalDenom: "bsc0x29a63F4B209C29B4DC47f06FFA896F32667DAD2C",
+      coinDecimals: 18,
+      coinGeckoId: "pundi-x-purse",
+    },
+    walletUrl:
+      process.env.NODE_ENV === "production"
+        ? "https://explorer.functionx.io/pundix/validators"
+        : "http://localhost:8080/#/cosmoshub/stake",
+    walletUrlForStaking:
+      process.env.NODE_ENV === "production"
+        ? "https://explorer.functionx.io/pundix/validators"
+        : "http://localhost:8080/#/cosmoshub/stake",
+    bip44: {
+      coinType: 118,
+    },
+    bech32Config: Bech32Address.defaultBech32Config("px"),
+    currencies: [
+      {
+        coinDenom: "PUNDIX",
+        coinMinimalDenom:
+          "ibc/55367B7B6572631B78A93C66EF9FDFCE87CDE372CC4ED7848DA78C1EB1DCDD78",
+        coinDecimals: 18,
+        coinGeckoId: "pundi-x-2",
+      },
+      {
+        coinDenom: "PURSE",
+        coinMinimalDenom: "bsc0x29a63F4B209C29B4DC47f06FFA896F32667DAD2C",
+        coinDecimals: 18,
+        coinGeckoId: "pundi-x-purse",
+      },
+    ],
+    feeCurrencies: [
+      {
+        coinDenom: "PUNDIX",
+        coinMinimalDenom:
+          "ibc/55367B7B6572631B78A93C66EF9FDFCE87CDE372CC4ED7848DA78C1EB1DCDD78",
+        coinDecimals: 18,
+        coinGeckoId: "pundi-x-2",
+      },
+    ],
+    coinType: 118,
+    gasPriceStep: {
+      low: 2000 * Math.pow(10, 9),
+      average: 2000 * Math.pow(10, 9),
+      high: 2100 * Math.pow(10, 9),
+    },
+    features: ["ibc-transfer"],
+  },
+  {
+    rpc: "https://testnet-px-json.functionx.io:26657",
+    rpcConfig: undefined,
+    rest: "https://testnet-px-rest.functionx.io",
+    restConfig: undefined,
+    chainId: "payalebar",
+    chainName: "Pundi X Testnet",
+    stakeCurrency: {
+      coinDenom: "PUNDIX",
+      coinMinimalDenom:
+        "ibc/169A52CA4862329131348484982CE75B3D6CC78AFB94C3107026C70CB66E7B2E",
+      coinDecimals: 18,
+      coinGeckoId: "pundi-x-2",
+    },
+    rewardCurrency: {
+      coinDenom: "PURSE",
+      coinMinimalDenom: "bsc0x0BEdB58eC8D603E71556ef8aA4014c68DBd57AD7",
+      coinDecimals: 18,
+      coinGeckoId: "pundi-x-purse",
+    },
+    walletUrl:
+      process.env.NODE_ENV === "production"
+        ? "https://testnet-explorer.functionx.io/pundix/validators"
+        : "http://localhost:8080/#/cosmoshub/stake",
+    walletUrlForStaking:
+      process.env.NODE_ENV === "production"
+        ? "https://testnet-explorer.functionx.io/pundix/validators"
+        : "http://localhost:8080/#/cosmoshub/stake",
+    bip44: {
+      coinType: 118,
+    },
+    bech32Config: Bech32Address.defaultBech32Config("px"),
+    currencies: [
+      {
+        coinDenom: "PUNDIX",
+        coinMinimalDenom:
+          "ibc/169A52CA4862329131348484982CE75B3D6CC78AFB94C3107026C70CB66E7B2E",
+        coinDecimals: 18,
+        coinGeckoId: "pundi-x-2",
+        coinImageUrl:
+          "https://s2.coinmarketcap.com/static/img/coins/64x64/9040.png",
+      },
+      {
+        coinDenom: "PURSE",
+        coinMinimalDenom: "bsc0x0BEdB58eC8D603E71556ef8aA4014c68DBd57AD7",
+        coinDecimals: 18,
+        coinGeckoId: "pundi-x-purse",
+        coinImageUrl:
+          "https://s2.coinmarketcap.com/static/img/coins/64x64/14538.png",
+      },
+    ],
+    feeCurrencies: [
+      {
+        coinDenom: "PUNDIX",
+        coinMinimalDenom:
+          "ibc/169A52CA4862329131348484982CE75B3D6CC78AFB94C3107026C70CB66E7B2E",
+        coinDecimals: 18,
+        coinGeckoId: "pundi-x-2",
+      },
+    ],
+    coinType: 118,
+    gasPriceStep: {
+      low: 2000 * Math.pow(10, 9),
+      average: 2000 * Math.pow(10, 9),
+      high: 2000 * Math.pow(10, 9),
     },
     features: ["ibc-transfer"],
   },

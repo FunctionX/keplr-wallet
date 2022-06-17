@@ -78,7 +78,7 @@ export const Menu: FunctionComponent = observer(() => {
       <div className={styleMenu.footer}>
         <a
           className={styleMenu.inner}
-          href="https://github.com/functionx/keplr-extension"
+          href="https://github.com/FunctionX/keplr-wallet"
           target="_blank"
           rel="noopener noreferrer"
         >

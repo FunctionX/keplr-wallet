@@ -56,7 +56,7 @@ export const VotePage: FunctionComponent = observer(() => {
   const current = chainStore.current;
 
   const memoConfig = useMemoConfig(chainStore, current.chainId);
-  const gasConfig = useGasConfig(chainStore, current.chainId, 120000);
+  const gasConfig = useGasConfig(chainStore, current.chainId, 135000);
   const amountConfig = useAmountConfig(
     chainStore,
     queriesStore,

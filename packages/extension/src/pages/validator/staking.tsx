@@ -38,6 +38,7 @@ import { useNotification } from "../../components/notification";
 import classnames from "classnames";
 import styleCoinInput from "../../components/form/coin-input.module.scss";
 import { Address } from "../../components/address";
+import { CoinPretty, Dec, Int } from "@keplr-wallet/unit";
 
 export const StakingPage: FunctionComponent = observer(() => {
   const history = useHistory();
@@ -52,7 +53,22 @@ export const StakingPage: FunctionComponent = observer(() => {
   const { chainStore, queriesStore, accountStore, priceStore } = useStore();
   const accountInfo = accountStore.getAccount(chainStore.current.chainId);
   const queries = queriesStore.get(chainStore.current.chainId);
-
+  const delegations = queries.cosmos.queryDelegations.getQueryBech32Address(
+    accountInfo.bech32Address
+  ).delegations;
+  if (delegations.length === 0) {
+    delegations.push({
+      delegation: {
+        delegator_address: "",
+        validator_address: "",
+        shares: "",
+      },
+      balance: {
+        denom: "",
+        amount: "",
+      },
+    });
+  }
   const bondedValidators = queries.cosmos.queryValidators.getQueryStatus(
     Staking.BondStatus.Bonded
   );
@@ -80,7 +96,7 @@ export const StakingPage: FunctionComponent = observer(() => {
   const gasConfig = useGasConfig(
     chainStore,
     chainStore.current.chainId,
-    120000
+    135000
   );
   const amountConfig = useAmountConfig(
     chainStore,
@@ -96,6 +112,8 @@ export const StakingPage: FunctionComponent = observer(() => {
     amountConfig,
     gasConfig
   );
+
+  const [showBalance, setShowBalance] = useState(balance);
 
   const options = ["Delegate", "Undelegate" /*, "Redelegate"*/];
   const [option, setOption] = useState("Delegate");
@@ -189,7 +207,7 @@ export const StakingPage: FunctionComponent = observer(() => {
                 case "Undelegate":
                   await accountInfo.cosmos.sendUndelegateMsg(
                     amountConfig.amount,
-                    validator?.operator_address,
+                    validator.operator_address,
                     memoConfig.memo,
                     stdFee,
                     {
@@ -248,6 +266,35 @@ export const StakingPage: FunctionComponent = observer(() => {
                             e.preventDefault();
 
                             setOption(currency);
+
+                            setValidator(
+                              currency === "Delegate"
+                                ? validators[0]
+                                : validators.find(
+                                    (v) =>
+                                      v.operator_address ==
+                                      delegations[0].delegation
+                                        .validator_address
+                                  ) ?? {
+                                    operator_address: "",
+                                    description: { moniker: undefined },
+                                  }
+                            );
+
+                            setShowBalance(
+                              currency === "Delegate"
+                                ? balance
+                                : new CoinPretty(
+                                    balance.currency,
+                                    new Int(
+                                      delegations.find(
+                                        (d) =>
+                                          d.delegation.validator_address ===
+                                          validator.operator_address
+                                      )?.balance.amount ?? "0"
+                                    )
+                                  )
+                            );
                           }}
                         >
                           {currency}
@@ -265,9 +312,18 @@ export const StakingPage: FunctionComponent = observer(() => {
                 >
                   Validator
                   <div className={classnames(styleCoinInput.balance)}>
-                    <Address maxCharacters={32} lineBreakBeforePrefix={false}>
-                      {validator.operator_address}
-                    </Address>
+                    <a
+                      href={
+                        chainStore.current.walletUrlForStaking +
+                        validator.operator_address
+                      }
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Address maxCharacters={32} lineBreakBeforePrefix={false}>
+                        {validator.operator_address}
+                      </Address>
+                    </a>
                   </div>
                 </Label>
                 <ButtonDropdown
@@ -282,24 +338,56 @@ export const StakingPage: FunctionComponent = observer(() => {
                     {validator.description.moniker}
                   </DropdownToggle>
                   <DropdownMenu>
-                    {validators.map((currency) => {
-                      return (
-                        <DropdownItem
-                          key={currency.operator_address}
-                          active={
-                            currency.operator_address ===
-                            validator.operator_address
-                          }
-                          onClick={(e) => {
-                            e.preventDefault();
+                    {validators
+                      .filter((v) => {
+                        return (
+                          (option === "Undelegate" &&
+                            delegations.find(
+                              (d) =>
+                                d.delegation.validator_address ===
+                                v.operator_address
+                            )) ||
+                          option === "Delegate"
+                        );
+                      })
+                      .map((currency, index) => {
+                        return (
+                          <DropdownItem
+                            key={currency.operator_address}
+                            active={
+                              currency.operator_address ===
+                              validator.operator_address
+                            }
+                            disabled={currency.jailed}
+                            onClick={(e) => {
+                              e.preventDefault();
 
-                            setValidator(currency);
-                          }}
-                        >
-                          {currency.description.moniker}
-                        </DropdownItem>
-                      );
-                    })}
+                              setValidator(currency);
+
+                              setShowBalance(
+                                option === "Delegate"
+                                  ? balance
+                                  : new CoinPretty(
+                                      balance.currency,
+                                      new Int(
+                                        delegations.find(
+                                          (d) =>
+                                            d.delegation.validator_address ===
+                                            currency.operator_address
+                                        )?.balance.amount ?? "0"
+                                      )
+                                    )
+                              );
+                            }}
+                          >
+                            {`${index + 1} ${new Dec(
+                              currency.commission.commission_rates.rate
+                            )
+                              .mul(new Dec(100))
+                              .toString(2)}% ${currency.description.moniker}`}
+                          </DropdownItem>
+                        );
+                      })}
                   </DropdownMenu>
                 </ButtonDropdown>
               </FormGroup>
@@ -324,7 +412,10 @@ export const StakingPage: FunctionComponent = observer(() => {
                       amountConfig.toggleIsMax();
                     }}
                   >
-                    {`Balance: ${balance.trim(true).maxDecimals(6).toString()}`}
+                    {`Balance: ${showBalance
+                      .trim(true)
+                      .maxDecimals(6)
+                      .toString()}`}
                   </div>
                 </Label>
                 <Input

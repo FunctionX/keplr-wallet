@@ -210,6 +210,10 @@ export const StakeView: FunctionComponent = observer(() => {
           color="primary"
           size="sm"
           // outline={isRewardExist}
+          data-loading={
+            accountInfo.isSendingMsg === "delegate" ||
+            accountInfo.isSendingMsg === "undelegate"
+          }
           onClick={(e) => {
             e.preventDefault();
 

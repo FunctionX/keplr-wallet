@@ -58,6 +58,7 @@ export const GravityView: FunctionComponent = observer(() => {
           color="primary"
           size="sm"
           disabled={!hasAssets}
+          data-loading={accountInfo.isSendingMsg === "gravityTransfer"}
           onClick={(e) => {
             e.preventDefault();
 

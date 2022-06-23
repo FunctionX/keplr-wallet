@@ -115,14 +115,8 @@ export const EmbedChainInfos: ChainInfo[] = [
       coinDecimals: 18,
       coinGeckoId: "fx-coin",
     },
-    walletUrl:
-      process.env.NODE_ENV === "production"
-        ? "https://explorer.functionx.io/fxcore/validators"
-        : "http://localhost:8080/#/cosmoshub/stake",
-    walletUrlForStaking:
-      process.env.NODE_ENV === "production"
-        ? "https://explorer.functionx.io/fxcore/validators"
-        : "http://localhost:8080/#/cosmoshub/stake",
+    walletUrl: "https://explorer.functionx.io/fxcore/validators",
+    walletUrlForStaking: "https://explorer.functionx.io/fxcore/validator/",
     bip44: {
       coinType: 118,
     },
@@ -177,14 +171,9 @@ export const EmbedChainInfos: ChainInfo[] = [
       coinDecimals: 18,
       coinGeckoId: "fx-coin",
     },
-    walletUrl:
-      process.env.NODE_ENV === "production"
-        ? "https://testnet-explorer.functionx.io/fxcore/validators"
-        : "http://localhost:8080/#/cosmoshub/stake",
+    walletUrl: "https://testnet-explorer.functionx.io/fxcore/validators",
     walletUrlForStaking:
-      process.env.NODE_ENV === "production"
-        ? "https://testnet-explorer.functionx.io/fxcore/validators"
-        : "http://localhost:8080/#/cosmoshub/stake",
+      "https://testnet-explorer.functionx.io/fxcore/validator/",
     bip44: {
       coinType: 118,
     },
@@ -260,14 +249,8 @@ export const EmbedChainInfos: ChainInfo[] = [
       coinDecimals: 18,
       coinGeckoId: "pundi-x-purse",
     },
-    walletUrl:
-      process.env.NODE_ENV === "production"
-        ? "https://explorer.functionx.io/pundix/validators"
-        : "http://localhost:8080/#/cosmoshub/stake",
-    walletUrlForStaking:
-      process.env.NODE_ENV === "production"
-        ? "https://explorer.functionx.io/pundix/validators"
-        : "http://localhost:8080/#/cosmoshub/stake",
+    walletUrl: "https://explorer.functionx.io/pundix/validators",
+    walletUrlForStaking: "https://explorer.functionx.io/pundix/validator/",
     bip44: {
       coinType: 118,
     },
@@ -324,14 +307,9 @@ export const EmbedChainInfos: ChainInfo[] = [
       coinDecimals: 18,
       coinGeckoId: "pundi-x-purse",
     },
-    walletUrl:
-      process.env.NODE_ENV === "production"
-        ? "https://testnet-explorer.functionx.io/pundix/validators"
-        : "http://localhost:8080/#/cosmoshub/stake",
+    walletUrl: "https://testnet-explorer.functionx.io/pundix/validators",
     walletUrlForStaking:
-      process.env.NODE_ENV === "production"
-        ? "https://testnet-explorer.functionx.io/pundix/validators"
-        : "http://localhost:8080/#/cosmoshub/stake",
+      "https://testnet-explorer.functionx.io/pundix/validator/",
     bip44: {
       coinType: 118,
     },

@@ -55,7 +55,7 @@ export const GravityPage: FunctionComponent = observer(() => {
   const gasConfig = useGasConfig(
     chainStore,
     chainStore.current.chainId,
-    120000
+    130000
   );
   const amountConfig = useAmountConfig(
     chainStore,

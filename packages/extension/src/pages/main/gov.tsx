@@ -60,6 +60,7 @@ export const GovView: FunctionComponent = observer(() => {
           color="primary"
           size="sm"
           disabled={!hasAssets || proposals.length === 0}
+          data-loading={accountInfo.isSendingMsg === "govVote"}
           onClick={(e) => {
             e.preventDefault();
 

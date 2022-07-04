@@ -258,15 +258,6 @@ export const ValidatorEditPage: FunctionComponent = observer(() => {
             </FormGroup>
             <Input
               type="text"
-              label="Moniker"
-              defaultValue={validator.description.moniker}
-              onChange={(e) => {
-                e.preventDefault();
-                validator.description.moniker = e.target.value;
-              }}
-            />
-            <Input
-              type="text"
               label="Identity"
               defaultValue={validator.description.identity}
               onChange={(e) => {

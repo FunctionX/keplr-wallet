@@ -103,9 +103,15 @@ import {
 
 export const EmbedChainInfos: ChainInfo[] = [
   {
-    rpc: "https://fx-json.functionx.io:26657",
+    rpc:
+      process.env.NODE_ENV === "production"
+        ? "https://fx-json.functionx.io:26657"
+        : "http://127.0.0.1:26657",
     rpcConfig: undefined,
-    rest: "https://fx-rest.functionx.io",
+    rest:
+      process.env.NODE_ENV === "production"
+        ? "https://fx-rest.functionx.io"
+        : "http://127.0.0.1:1317",
     restConfig: undefined,
     chainId: "fxcore",
     chainName: "f(x)Core",

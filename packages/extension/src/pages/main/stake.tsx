@@ -15,6 +15,17 @@ import { useNotification } from "../../components/notification";
 import { useHistory } from "react-router";
 
 import { FormattedMessage } from "react-intl";
+import { Bech32Address } from "@keplr-wallet/cosmos";
+import { Staking } from "@keplr-wallet/stores";
+import {
+  MsgWithdrawDelegatorReward,
+  MsgWithdrawValidatorCommission,
+} from "@keplr-wallet/proto-types/cosmos/distribution/v1beta1/tx";
+import {
+  useAmountConfig,
+  useFeeConfig,
+  useGasConfig,
+} from "@keplr-wallet/hooks";
 
 export const StakeView: FunctionComponent = observer(() => {
   const history = useHistory();
@@ -47,6 +58,54 @@ export const StakeView: FunctionComponent = observer(() => {
     return stakable.balance.toDec().gt(new Dec(0));
   }, [stakable.balance]);
 
+  let validator = undefined;
+  let validatorAddress = "";
+  let commissionReward = "0";
+  if (accountInfo.bech32Address) {
+    const bondedValidators = queries.cosmos.queryValidators.getQueryStatus(
+      Staking.BondStatus.Bonded
+    );
+    const unbondingValidators = queries.cosmos.queryValidators.getQueryStatus(
+      Staking.BondStatus.Unbonding
+    );
+    const unbondedValidators = queries.cosmos.queryValidators.getQueryStatus(
+      Staking.BondStatus.Unbonded
+    );
+    validatorAddress = Bech32Address.fromBech32(
+      accountInfo.bech32Address
+    ).toBech32(chainStore.current.bech32Config.bech32PrefixValAddr);
+    validator = bondedValidators.validators
+      .concat(unbondingValidators.validators)
+      .concat(unbondedValidators.validators)
+      .find((val) => val.operator_address === validatorAddress);
+    commissionReward =
+      queries.cosmos.queryDistribution
+        .getQueryValAddress(validatorAddress)
+        .commissionRewards.find((v) => {
+          return v.denom === rewardDenom;
+        })?.amount ?? "0";
+  }
+
+  const gasConfig = useGasConfig(
+    chainStore,
+    chainStore.current.chainId,
+    150000
+  );
+  const amountConfig = useAmountConfig(
+    chainStore,
+    queriesStore,
+    chainStore.current.chainId,
+    accountInfo.bech32Address
+  );
+  const feeConfig = useFeeConfig(
+    chainStore,
+    queriesStore,
+    chainStore.current.chainId,
+    accountInfo.bech32Address,
+    amountConfig,
+    gasConfig
+  );
+
   const withdrawAllRewards = async () => {
     if (accountInfo.isReadyToSendMsgs) {
       try {
@@ -57,7 +116,11 @@ export const StakeView: FunctionComponent = observer(() => {
           rewards.getDescendingPendingRewardValidatorAddresses(8),
           "",
           undefined,
-          undefined,
+          {
+            preferNoSetFee: false,
+            preferNoSetMemo: false,
+            disableBalanceCheck: false,
+          },
           {
             onBroadcasted: () => {
               analyticsStore.logEvent("Claim reward tx broadcasted", {
@@ -76,6 +139,80 @@ export const StakeView: FunctionComponent = observer(() => {
           placement: "top-center",
           duration: 5,
           content: `Fail to withdraw rewards: ${e.message}`,
+          canDelete: true,
+          transition: {
+            duration: 0.25,
+          },
+        });
+      }
+    }
+  };
+
+  const withdrawValCommission = async () => {
+    if (accountInfo.isReadyToSendMsgs) {
+      try {
+        // When the user delegated too many validators,
+        // it can't be sent to withdraw rewards from all validators due to the block gas limit.
+        // So, to prevent this problem, just send the msgs up to 8.
+        const msgs = [
+          {
+            type: "cosmos-sdk/MsgWithdrawDelegationReward",
+            value: {
+              delegator_address: accountInfo.bech32Address,
+              validator_address: validatorAddress,
+            },
+          },
+          {
+            type: "cosmos-sdk/MsgWithdrawValidatorCommission",
+            value: {
+              validator_address: validatorAddress,
+            },
+          },
+        ];
+        await accountInfo.cosmos.sendMsgs(
+          "withdrawValidatorCommission",
+          {
+            aminoMsgs: msgs,
+            protoMsgs: msgs.map((msg) => {
+              if (msg.type === "cosmos-sdk/MsgWithdrawValidatorCommission") {
+                return {
+                  typeUrl:
+                    "/cosmos.distribution.v1beta1.MsgWithdrawValidatorCommission",
+                  value: MsgWithdrawValidatorCommission.encode({
+                    validatorAddress: msg.value.validator_address,
+                  }).finish(),
+                };
+              } else {
+                return {
+                  typeUrl:
+                    "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward",
+                  value: MsgWithdrawDelegatorReward.encode({
+                    delegatorAddress: msg.value.delegator_address ?? "",
+                    validatorAddress: msg.value.validator_address,
+                  }).finish(),
+                };
+              }
+            }),
+          },
+          "",
+          feeConfig.toStdFee(),
+          {
+            preferNoSetFee: false,
+            preferNoSetMemo: false,
+            disableBalanceCheck: false,
+          },
+          undefined
+        );
+
+        history.replace("/");
+      } catch (e) {
+        history.replace("/");
+        console.log(e);
+        notification.push({
+          type: "warning",
+          placement: "top-center",
+          duration: 5,
+          content: `Fail to withdraw commission rewards: ${e.message}`,
           canDelete: true,
           transition: {
             duration: 0.25,
@@ -135,6 +272,64 @@ export const StakeView: FunctionComponent = observer(() => {
                 data-loading={accountInfo.isSendingMsg === "withdrawRewards"}
               >
                 <FormattedMessage id="main.stake.button.claim-rewards" />
+              </Button>
+            }
+          </div>
+          <hr className={styleStake.hr} />
+        </>
+      ) : null}
+
+      {validator ? (
+        <>
+          <div
+            className={classnames(styleStake.containerInner, styleStake.reward)}
+          >
+            <div className={styleStake.vertical}>
+              <p
+                className={classnames(
+                  "h4",
+                  "my-0",
+                  "font-weight-normal",
+                  styleStake.paragraphSub
+                )}
+              >
+                <FormattedMessage id="main.stake.message.pending-commission-reward" />
+              </p>
+              <p
+                className={classnames(
+                  "h2",
+                  "my-0",
+                  "font-weight-normal",
+                  styleStake.paragraphMain
+                )}
+              >
+                {new CoinPretty(
+                  chainStore.current.stakeCurrency,
+                  new Dec(commissionReward)
+                )
+                  .maxDecimals(0)
+                  .hideDenom(true)
+                  .toString()}
+                {/*{rewards.isFetching ? (*/}
+                {/*  <span>*/}
+                {/*    <i className="fas fa-spinner fa-spin" />*/}
+                {/*  </span>*/}
+                {/*) : null}*/}
+              </p>
+            </div>
+            <div style={{ flex: 1 }} />
+            {
+              <Button
+                className={styleStake.button}
+                color="primary"
+                size="sm"
+                disabled={!accountInfo.isReadyToSendMsgs}
+                onClick={withdrawValCommission}
+                data-loading={
+                  accountInfo.isSendingMsg === "withdrawValidatorCommission"
+                }
+              >
+                <FormattedMessage id="main.stake.button.commission-rewards" />
               </Button>
             }
           </div>

@@ -28,6 +28,9 @@
   "main.stake.button.stake": "Stake",
   "main.stake.tooltip.no-asset": "No token in your account. Deposit some tokens to stake.",
 
+  "main.stake.message.pending-commission-reward": "Pending Commission Reward",
+  "main.stake.button.commission-rewards": "Commission",
+
   "main.ibc.transfer.title": "IBC Transfer",
   "main.ibc.transfer.paragraph": "Send tokens over IBC",
   "main.ibc.transfer.button": "Transfer",

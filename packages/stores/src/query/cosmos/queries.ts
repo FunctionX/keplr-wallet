@@ -35,6 +35,7 @@ import {
 } from "./supply/osmosis";
 import { ObservableQueryDistributionParams } from "./distribution";
 import { ObservableQueryRPCStatus } from "./status";
+import { ObservableQueryDistribution } from "./distribution/commission";
 
 export interface CosmosQueries {
   cosmos: CosmosQueriesImpl;
@@ -74,6 +75,7 @@ export class CosmosQueriesImpl {
   public readonly queryStakingParams: DeepReadonly<ObservableQueryStakingParams>;
   public readonly querySupplyTotal: DeepReadonly<ObservableQuerySupplyTotal>;
   public readonly queryDistributionParams: DeepReadonly<ObservableQueryDistributionParams>;
+  public readonly queryDistribution: DeepReadonly<ObservableQueryDistribution>;
   public readonly queryInflation: DeepReadonly<ObservableQueryInflation>;
   public readonly queryRewards: DeepReadonly<ObservableQueryRewards>;
   public readonly queryDelegations: DeepReadonly<ObservableQueryDelegations>;
@@ -142,6 +144,12 @@ export class CosmosQueriesImpl {
     );
 
     this.queryDistributionParams = new ObservableQueryDistributionParams(
+      kvStore,
+      chainId,
+      chainGetter
+    );
+
+    this.queryDistribution = new ObservableQueryDistribution(
       kvStore,
       chainId,
       chainGetter

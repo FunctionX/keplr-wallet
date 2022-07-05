@@ -80,7 +80,8 @@ export const useBIP44Option = (coinType?: number) => {
 
 export const AdvancedBIP44Option: FunctionComponent<{
   bip44Option: BIP44Option;
-}> = observer(({ bip44Option }) => {
+  defaultOpen?: boolean;
+}> = observer(({ bip44Option, defaultOpen }) => {
   const intl = useIntl();
 
   const confirm = useConfirm();
@@ -88,7 +89,8 @@ export const AdvancedBIP44Option: FunctionComponent<{
   const [isOpen, setIsOpen] = useState(
     bip44Option.account !== 0 ||
       bip44Option.change !== 0 ||
-      bip44Option.index !== 0
+      bip44Option.index !== 0 ||
+      defaultOpen === true
   );
   const toggleOpen = async () => {
     if (isOpen) {

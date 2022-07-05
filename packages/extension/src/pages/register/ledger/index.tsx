@@ -140,7 +140,7 @@ export const ImportLedgerPage: FunctionComponent<{
             />
           </React.Fragment>
         ) : null}
-        <AdvancedBIP44Option bip44Option={bip44Option} />
+        <AdvancedBIP44Option bip44Option={bip44Option} defaultOpen={true} />
         <Button
           color="primary"
           type="submit"

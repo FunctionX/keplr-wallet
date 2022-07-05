@@ -200,7 +200,7 @@ export const GenerateMnemonicModePage: FunctionComponent<{
             />
           </React.Fragment>
         ) : null}
-        <AdvancedBIP44Option bip44Option={bip44Option} />
+        <AdvancedBIP44Option bip44Option={bip44Option} defaultOpen={true} />
         <Button color="primary" type="submit" block>
           <FormattedMessage id="register.create.button.next" />
         </Button>

@@ -92,7 +92,11 @@ export class BackgroundTxService {
       const txTracer = new TendermintTxTracer(chainInfo.rpc, "/websocket");
       txTracer.traceTx(txHash).then((tx) => {
         txTracer.close();
-        BackgroundTxService.processTxResultNotification(this.notification, tx);
+        BackgroundTxService.processTxResultNotification(
+          this.notification,
+          tx,
+          txResponse.txhash
+        );
       });
 
       return txHash;
@@ -105,7 +109,8 @@ export class BackgroundTxService {
 
   private static processTxResultNotification(
     notification: Notification,
-    result: any
+    result: any,
+    txHash: string
   ): void {
     try {
       if (result.mode === "commit") {
@@ -130,7 +135,7 @@ export class BackgroundTxService {
         iconRelativeUrl: "assets/temp-icon.svg",
         title: "Tx succeeds",
         // TODO: Let users know the tx id?
-        message: "Congratulations!",
+        message: `${txHash} Congratulations!`,
       });
     } catch (e) {
       BackgroundTxService.processTxErrorNotification(notification, e);

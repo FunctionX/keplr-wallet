@@ -33,7 +33,7 @@ export class ObservableQueryGovernance extends ObservableChainQuery<GovProposals
       chainId,
       chainGetter,
       // TODO: Handle pagination
-      "/cosmos/gov/v1beta1/proposals?pagination.limit=3000"
+      "/cosmos/gov/v1beta1/proposals?pagination.limit=3&pagination.reverse=true"
     );
     makeObservable(this);
   }
